@@ -1009,6 +1009,16 @@ namespace EVEMon.SettingsUI
             Util.OpenURL(new Uri(NetworkConstants.CCPApplicationRegistration));
         }
 
+        /// <summary>
+        /// General > Network > ESI Settings.
+        /// Fills out the SSO scopes setting with the defaultsd efined in NetworkConstants
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void insertAllScopesButton_Click(object sender, EventArgs e)
+        {
+            scopesTextBox.Text = NetworkConstants.SSOScopes;
+        }
         #endregion
     }
 }
