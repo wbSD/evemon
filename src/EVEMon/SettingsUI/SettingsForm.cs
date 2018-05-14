@@ -184,9 +184,10 @@ namespace EVEMon.SettingsUI
             proxyHttpHostTextBox.Text = m_settings.Proxy.Host;
             proxyAuthenticationButton.Tag = m_settings.Proxy;
 
-            // Client ID / Secret
+            // Client ID / Secret / Scopes
             clientIDTextBox.Text = m_settings.SSOClientID;
             clientSecretTextBox.Text = m_settings.SSOClientSecret;
+            scopesTextBox.Text = m_settings.SSOScopes;
 
             // Updates
             cbCheckTime.Checked = m_settings.Updates.CheckTimeOnStartup;
@@ -531,9 +532,10 @@ namespace EVEMon.SettingsUI
                 m_settings.Proxy.Port = proxyPort;
             m_settings.Proxy.Host = proxyHttpHostTextBox.Text;
 
-            // Client ID / Secret
+            // Client ID / Secret / Scopes
             m_settings.SSOClientID = (clientIDTextBox.Text ?? string.Empty).Trim();
             m_settings.SSOClientSecret = (clientSecretTextBox.Text ?? string.Empty).Trim();
+            m_settings.SSOScopes = (scopesTextBox.Text ?? string.Empty).Trim();
 
             // Updates
             m_settings.Updates.CheckEVEMonVersion = cbCheckForUpdates.Checked;
