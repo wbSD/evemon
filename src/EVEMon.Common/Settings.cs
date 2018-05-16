@@ -39,7 +39,7 @@ namespace EVEMon.Common
         {
             SSOClientID = string.Empty;
             SSOClientSecret = string.Empty;
-            SSOScopes = string.Empty;
+            SSOScopes = Constants.NetworkConstants.SSOScopes;
             UI = new UISettings();
             G15 = new G15Settings();
             Proxy = new ProxySettings();
@@ -199,7 +199,7 @@ namespace EVEMon.Common
                 // API settings
                 SSOClientID = s_settings.SSOClientID ?? string.Empty;
                 SSOClientSecret = s_settings.SSOClientSecret ?? string.Empty;
-                SSOScopes = s_settings.SSOScopes ?? string.Empty;
+                SSOScopes = !string.IsNullOrEmpty(s_settings.SSOScopes) ? s_settings.SSOScopes : Constants.NetworkConstants.SSOScopes;
 
                 // User settings
                 UI = s_settings.UI;
