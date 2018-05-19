@@ -45,6 +45,20 @@ namespace EVEMon.Common.Extensions
         public static bool HasParent(this Enum item, Enum other) => GetAttribute<ParentAttribute>(item)?.Parents?.Any(e => other.Equals(e)) ?? false;
 
         /// <summary>
+        /// Gets the ESI method url of the given member, if any.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static string GetESIMethodPath(this Enum item) => GetAttribute<ESIMethodAttribute>(item)?.Path;
+
+        /// <summary>
+        /// Gets the ESI method scope of the given member, if any.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static string GetESIMethodScope(this Enum item) => GetAttribute<ESIMethodAttribute>(item)?.Scope;
+
+        /// <summary>
         /// Gets the period bound to the given enumeration member.
         /// </summary>
         /// <param name="item"></param>
