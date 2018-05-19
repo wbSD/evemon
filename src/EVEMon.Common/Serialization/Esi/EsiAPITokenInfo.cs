@@ -39,6 +39,11 @@ namespace EVEMon.Common.Serialization.Esi
         // When this token expires
         private DateTime expires;
 
+        public bool HasScope(string scope)
+        {
+            return scope != null && Scopes?.Contains(scope) == true;
+        }
+
         public EsiAPITokenInfo()
         {
             expires = DateTime.UtcNow;

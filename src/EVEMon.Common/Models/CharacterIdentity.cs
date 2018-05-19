@@ -61,7 +61,7 @@ namespace EVEMon.Common.Models
         /// <param name="method">The method.</param>
         /// <returns>The API key with access to the specified method or null if non found.</returns>
         public ESIKey FindAPIKeyWithAccess(ESIAPICharacterMethods method)
-            => ESIKeys.FirstOrDefault(apiKey => apiKey.Monitored && (ulong)method == (apiKey.AccessMask & (ulong)method));
+            => ESIKeys.FirstOrDefault(apiKey => apiKey.Monitored && (ulong)method == (apiKey.CharacterAccessMask & (ulong)method));
 
         /// <summary>
         /// Finds the API key with access to the specified API method.
@@ -69,6 +69,6 @@ namespace EVEMon.Common.Models
         /// <param name="method">The method.</param>
         /// <returns>The API key with access to the specified method or null if non found.</returns>
         public ESIKey FindAPIKeyWithAccess(ESIAPICorporationMethods method)
-            => ESIKeys.FirstOrDefault(apiKey => apiKey.Monitored && (ulong)method == (apiKey.AccessMask & (ulong)method));
+            => ESIKeys.FirstOrDefault(apiKey => apiKey.Monitored && (ulong)method == (apiKey.CorporationAccessMask & (ulong)method));
     }
 }

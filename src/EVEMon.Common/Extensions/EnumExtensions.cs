@@ -59,6 +59,13 @@ namespace EVEMon.Common.Extensions
         public static string GetESIMethodScope(this Enum item) => GetAttribute<ESIMethodAttribute>(item)?.Scope;
 
         /// <summary>
+        /// Checks if an ESI method scope is required for the given member.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool RequiresESIMethodScope(this Enum item) => item.GetESIMethodScope() != null;
+
+        /// <summary>
         /// Gets the period bound to the given enumeration member.
         /// </summary>
         /// <param name="item"></param>
