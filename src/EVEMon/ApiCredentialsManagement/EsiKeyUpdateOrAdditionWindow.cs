@@ -298,13 +298,13 @@ namespace EVEMon.ApiCredentialsManagement
             }
 
             // Issue a warning if the access of the ESI key is zero
-            if (e.AccessMask == 0UL)
+            if (e.CharacterAccessMask == 0UL && e.CorporationAccessMask == 0UL)
             {
                 WarningLabel.Text = "Beware! This ESI key does not provide any data!";
                 WarningLabel.Visible = true;
             }
             // Issue a warning if the access of ESI key is less than needed for basic features
-            else if (e.AccessMask < (long)CCPAPIMethodsEnum.BasicCharacterFeatures)
+            else if (e.CharacterAccessMask < (long)CCPAPIMethodsEnum.BasicCharacterFeatures)
             {
                 WarningLabel.Text = "Beware! The data this ESI key provides does not suffice for basic features!";
                 WarningLabel.Visible = true;
