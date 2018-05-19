@@ -1,9 +1,11 @@
-﻿using EVEMon.Common.Extensions;
+﻿using EVEMon.Common.Enumerations.CCPAPI;
+using EVEMon.Common.Extensions;
 using EVEMon.Common.Models;
 using EVEMon.Common.Serialization;
 using EVEMon.Common.Serialization.Esi;
 using EVEMon.Common.Serialization.Eve;
 using System;
+using System.Linq;
 
 namespace EVEMon.Common.CustomEventArgs
 {
@@ -24,8 +26,6 @@ namespace EVEMon.Common.CustomEventArgs
 
             ID = id;
             RefreshToken = refreshToken;
-            // At some point the ability to use limited scopes would be nice
-            AccessMask = ulong.MaxValue;
 
             if (charInfo.HasError)
                 CCPError = new CCPAPIError()
@@ -40,6 +40,16 @@ namespace EVEMon.Common.CustomEventArgs
                 CCPError = null;
                 long charId = result.CharacterID;
                 string name = result.CharacterName;
+
+                foreach (var method in Models.Extended.ESIMethods.Methods.Where(method =>
+                     !method.RequiresESIMethodScope() ||
+                     result.HasScope(method.GetESIMethodScope())))
+                {
+                    if (method is ESIAPICharacterMethods)
+                        CharacterAccessMask = CharacterAccessMask | (ulong)(ESIAPICharacterMethods)method;
+                    if (method is ESIAPICorporationMethods)
+                        CorporationAccessMask = CorporationAccessMask | (ulong)(ESIAPICorporationMethods)method;
+                }
 
                 // Only one character per ESI key
                 // Look for an existing character ID and update its name
@@ -72,11 +82,17 @@ namespace EVEMon.Common.CustomEventArgs
         public string RefreshToken { get; }
 
         /// <summary>
-        /// Gets or sets the access mask.
+        /// Gets or sets the character access mask.
         /// </summary>
-        /// <value>The access mask.</value>
-        public ulong AccessMask { get; }
-        
+        /// <value>The character access mask.</value>
+        public ulong CharacterAccessMask { get; }
+
+        /// <summary>
+        /// Gets or sets the corporation access mask.
+        /// </summary>
+        /// <value>The corporation access mask.</value>
+        public ulong CorporationAccessMask { get; }
+
         /// <summary>
         /// Gets or sets the expiration.
         /// </summary>

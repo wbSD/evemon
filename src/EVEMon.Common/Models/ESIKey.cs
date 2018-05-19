@@ -60,7 +60,8 @@ namespace EVEMon.Common.Models
         {
             ID = serial.ID;
             RefreshToken = serial.RefreshToken;
-            AccessMask = serial.AccessMask;
+            CharacterAccessMask = serial.CharacterAccessMask;
+            CorporationAccessMask = serial.CorporationAccessMask;
             m_monitored = serial.Monitored;
         }
 
@@ -102,11 +103,18 @@ namespace EVEMon.Common.Models
         public string RefreshToken { get; private set; }
 
         /// <summary>
-        /// Gets or sets the access mask.
+        /// Gets or sets the character access mask.
         /// </summary>
-        /// <value>The access mask.</value>
+        /// <value>The character access mask.</value>
         [XmlIgnore]
-        public ulong AccessMask { get; private set; }
+        public ulong CharacterAccessMask { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the corporation access mask.
+        /// </summary>
+        /// <value>The corporation access mask.</value>
+        [XmlIgnore]
+        public ulong CorporationAccessMask { get; private set; }
 
         /// <summary>
         /// Returns true if an error occurred while last trying to refresh this key.
@@ -437,7 +445,8 @@ namespace EVEMon.Common.Models
             {
                 ID = ID,
                 RefreshToken = RefreshToken,
-                AccessMask = AccessMask,
+                CharacterAccessMask = CharacterAccessMask,
+                CorporationAccessMask = CorporationAccessMask,
                 Monitored = m_monitored,
             };
 
@@ -470,7 +479,8 @@ namespace EVEMon.Common.Models
             e.ThrowIfNull(nameof(e));
 
             RefreshToken = e.RefreshToken;
-            AccessMask = e.AccessMask;
+            CharacterAccessMask = e.CharacterAccessMask;
+            CorporationAccessMask = e.CorporationAccessMask;
             // Throw out old access token
             AccessToken = string.Empty;
             m_keyExpires = DateTime.MinValue;
