@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EVEMon.Common.Constants;
+using EVEMon.Common.Extensions;
 using EVEMon.Common.Models.Extended;
 
 namespace EVEMon.Common.Models
@@ -16,33 +17,40 @@ namespace EVEMon.Common.Models
         /// </summary>
         /// <param name="method"></param>
         /// <param name="path"></param>
-        private ESIMethod(Enum method, string path)
+        private ESIMethod(Enum method, string path, string scope)
         {
             Method = method;
             Path = path;
+            Scope = scope;
         }
 
         /// <summary>
-        /// Returns the APIMethodsEnum enumeration member for this APIMethod.
+        /// Returns the APIMethodsEnum enumeration member for this ESIMethod.
         /// </summary>
         public Enum Method { get; }
 
         /// <summary>
-        /// Returns the defined URL suffix path for this APIMethod.
+        /// Returns the defined URL suffix path for this ESIMethod.
         /// </summary>
         public string Path { get; set; }
 
         /// <summary>
-        /// Creates a set of API methods with their default urls.
+        /// Returns the required scope for this ESIMethod, if any.
+        /// </summary>
+        public string Scope { get; }
+
+        /// <summary>
+        /// Creates a set of ESI methods with their default urls.
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<ESIMethod> CreateDefaultSet() =>
-            ESIMethods.Methods.Where(method => method.ToString() != "None").Select(methodName =>
+            ESIMethods.Methods.Where(method => method.ToString() != "None").Select(method =>
                 new
                 {
-                    methodName,
-                    methodURL = NetworkConstants.ResourceManager.GetString($"ESI{methodName}")
-                }).Where(method => method.methodURL != null)
-                .Select(method => new ESIMethod(method.methodName, method.methodURL));
+                    methodName = method,
+                    methodPath = method.GetESIMethodPath(),
+                    methodScope = method.GetESIMethodScope()
+                }).Where(method => method.methodPath != null)
+                .Select(method => new ESIMethod(method.methodName, method.methodPath, method.methodScope));
     }
 }
