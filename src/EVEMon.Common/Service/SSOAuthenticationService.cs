@@ -1,9 +1,12 @@
 ﻿using EVEMon.Common.Constants;
+using EVEMon.Common.Enumerations.CCPAPI;
 using EVEMon.Common.Extensions;
 using EVEMon.Common.Serialization;
 using EVEMon.Common.Serialization.Esi;
 using EVEMon.Common.Threading;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
@@ -129,7 +132,7 @@ namespace EVEMon.Common.Service
             return "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_clientID +
                 ":" + m_secret));
         }
-        
+
         /// <summary>
         /// Spawns a browser for the user to log in; the port is the location of the local
         /// web server which receives the response, the state is used to stop XSRF
@@ -137,11 +140,32 @@ namespace EVEMon.Common.Service
         /// </summary>
         /// <param name="state">The random state parameter used to stop cross-site forgery.</param>
         /// <param name="port">The port used for the response.</param>
-        public void SpawnBrowserForLogin(string state, int port)
+        public void SpawnBrowserForLogin(string state, int port, ulong? characterMask = null, ulong? corporationMask = null)
         {
+            string scopes;
+
+            if (!characterMask.HasValue && !corporationMask.HasValue)
+                scopes = m_scopes;
+            else
+            {
+                HashSet<string> scopeslist = new HashSet<string>();
+
+                var methods = Models.Extended.ESIMethods.Methods.Where(x => x.RequiresESIMethodScope());
+                foreach (var m in methods)
+                {
+                    if ((m is ESIAPICharacterMethods && ((ulong)(ESIAPICharacterMethods)m & characterMask) == (ulong)(ESIAPICharacterMethods)m) ||
+                        (m is ESIAPICorporationMethods && ((ulong)(ESIAPICorporationMethods)m & corporationMask) == (ulong)(ESIAPICorporationMethods)m))
+                    {
+                        scopeslist.Add(m.GetESIMethodScope());
+                    }
+                }
+
+                scopes = string.Join(" ", scopeslist);
+            }
+
             string redirect = string.Format(NetworkConstants.SSORedirect, port);
             string url = string.Format(NetworkConstants.SSOBase + NetworkConstants.SSOLogin,
-                WebUtility.UrlEncode(redirect), state, m_scopes, m_clientID);
+                WebUtility.UrlEncode(redirect), state, scopes, m_clientID);
             Util.OpenURL(new Uri(url));
         }
     }

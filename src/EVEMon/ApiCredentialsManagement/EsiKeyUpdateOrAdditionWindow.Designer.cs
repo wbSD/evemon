@@ -34,15 +34,16 @@ namespace EVEMon.ApiCredentialsManagement
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EsiKeyUpdateOrAdditionWindow));
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Mary Jane");
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Ali Baba");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("John Doe");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Mary Jane");
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Ali Baba");
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("John Doe");
             this.GuideLabel = new System.Windows.Forms.Label();
             this.ButtonNext = new System.Windows.Forms.Button();
             this.ButtonPrevious = new System.Windows.Forms.Button();
             this.ButtonCancel = new System.Windows.Forms.Button();
             this.MultiPanel = new EVEMon.Common.Controls.MultiPanel.MultiPanel();
             this.CredentialsPage = new EVEMon.Common.Controls.MultiPanel.MultiPanelPage();
+            this.Throbber = new EVEMon.Common.Controls.Throbber();
             this.ButtonESILogin = new System.Windows.Forms.Button();
             this.ResultPage = new EVEMon.Common.Controls.MultiPanel.MultiPanelPage();
             this.KeyTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -64,9 +65,9 @@ namespace EVEMon.ApiCredentialsManagement
             this.CachedWarningPage = new EVEMon.Common.Controls.MultiPanel.MultiPanelPage();
             this.CachedWarningLabel = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.Throbber = new EVEMon.Common.Controls.Throbber();
             this.MultiPanel.SuspendLayout();
             this.CredentialsPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Throbber)).BeginInit();
             this.ResultPage.SuspendLayout();
             this.KeyTableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.KeyPicture)).BeginInit();
@@ -79,7 +80,6 @@ namespace EVEMon.ApiCredentialsManagement
             this.ESITokenFailedErrorPage.SuspendLayout();
             this.CachedWarningPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Throbber)).BeginInit();
             this.SuspendLayout();
             // 
             // GuideLabel
@@ -138,7 +138,7 @@ namespace EVEMon.ApiCredentialsManagement
             this.MultiPanel.Controls.Add(this.ResultPage);
             this.MultiPanel.Location = new System.Drawing.Point(0, 0);
             this.MultiPanel.Name = "MultiPanel";
-            this.MultiPanel.SelectedPage = this.ResultPage;
+            this.MultiPanel.SelectedPage = this.CredentialsPage;
             this.MultiPanel.Size = new System.Drawing.Size(522, 171);
             this.MultiPanel.TabIndex = 0;
             // 
@@ -153,6 +153,19 @@ namespace EVEMon.ApiCredentialsManagement
             this.CredentialsPage.Size = new System.Drawing.Size(522, 171);
             this.CredentialsPage.TabIndex = 0;
             this.CredentialsPage.Text = "credentialsPage";
+            // 
+            // Throbber
+            // 
+            this.Throbber.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.Throbber.Location = new System.Drawing.Point(249, 63);
+            this.Throbber.MaximumSize = new System.Drawing.Size(24, 24);
+            this.Throbber.MinimumSize = new System.Drawing.Size(24, 24);
+            this.Throbber.Name = "Throbber";
+            this.Throbber.Size = new System.Drawing.Size(24, 24);
+            this.Throbber.State = EVEMon.Common.Enumerations.ThrobberState.Stopped;
+            this.Throbber.TabIndex = 1;
+            this.Throbber.TabStop = false;
+            this.Throbber.Visible = false;
             // 
             // ButtonESILogin
             // 
@@ -255,14 +268,14 @@ namespace EVEMon.ApiCredentialsManagement
             // 
             this.CharactersListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.CharactersListView.FullRowSelect = true;
-            listViewItem1.StateImageIndex = 0;
-            listViewItem2.StateImageIndex = 0;
-            listViewItem3.Checked = true;
-            listViewItem3.StateImageIndex = 1;
+            listViewItem4.StateImageIndex = 0;
+            listViewItem5.StateImageIndex = 0;
+            listViewItem6.Checked = true;
+            listViewItem6.StateImageIndex = 1;
             this.CharactersListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3});
+            listViewItem4,
+            listViewItem5,
+            listViewItem6});
             this.CharactersListView.Location = new System.Drawing.Point(276, 3);
             this.CharactersListView.Name = "CharactersListView";
             this.CharactersListView.Size = new System.Drawing.Size(197, 76);
@@ -396,19 +409,6 @@ namespace EVEMon.ApiCredentialsManagement
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // Throbber
-            // 
-            this.Throbber.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.Throbber.Location = new System.Drawing.Point(249, 63);
-            this.Throbber.MaximumSize = new System.Drawing.Size(24, 24);
-            this.Throbber.MinimumSize = new System.Drawing.Size(24, 24);
-            this.Throbber.Name = "Throbber";
-            this.Throbber.Size = new System.Drawing.Size(24, 24);
-            this.Throbber.State = EVEMon.Common.Enumerations.ThrobberState.Stopped;
-            this.Throbber.TabIndex = 1;
-            this.Throbber.TabStop = false;
-            this.Throbber.Visible = false;
-            // 
             // EsiKeyUpdateOrAdditionWindow
             // 
             this.AcceptButton = this.ButtonNext;
@@ -428,6 +428,7 @@ namespace EVEMon.ApiCredentialsManagement
             this.Text = "ESI Key Import";
             this.MultiPanel.ResumeLayout(false);
             this.CredentialsPage.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Throbber)).EndInit();
             this.ResultPage.ResumeLayout(false);
             this.ResultPage.PerformLayout();
             this.KeyTableLayoutPanel.ResumeLayout(false);
@@ -443,7 +444,6 @@ namespace EVEMon.ApiCredentialsManagement
             this.ESITokenFailedErrorPage.ResumeLayout(false);
             this.CachedWarningPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Throbber)).EndInit();
             this.ResumeLayout(false);
 
         }
