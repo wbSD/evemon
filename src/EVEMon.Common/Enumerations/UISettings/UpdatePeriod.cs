@@ -36,6 +36,9 @@ namespace EVEMon.Common.Enumerations.UISettings
         [Header("15 Minutes")]
         Minutes15,
 
+        [Header("20 Minutes")]
+        Minutes20,
+
         [Header("30 Minutes")]
         Minutes30,
 
