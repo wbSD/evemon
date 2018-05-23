@@ -9,8 +9,29 @@ namespace EVEMon.Common.Enumerations.UISettings
         [Header("Never")]
         Never,
 
+        [Header("5 Seconds")]
+        Seconds5,
+
+        [Header("10 Seconds")]
+        Seconds10,
+
+        [Header("15 Seconds")]
+        Seconds15,
+
+        [Header("30 Seconds")]
+        Seconds30,
+
+        [Header("1 Minute")]
+        Minutes1,
+
+        [Header("2 Minutes")]
+        Minutes2,
+
         [Header("5 Minutes")]
         Minutes5,
+
+        [Header("10 Minutes")]
+        Minutes10,
 
         [Header("15 Minutes")]
         Minutes15,
