@@ -53,7 +53,7 @@ namespace EVEMon.SettingsUI
                 {
                     Enum method = (Enum)combo.Tag;
                     List<UpdatePeriod> periods = GetUpdatePeriods(method);
-                    combo.SelectedIndex = Math.Max(0, periods.IndexOf(m_settings.Periods[method.ToString()]));
+                    combo.SelectedIndex = Math.Max(0, !m_settings.Periods.ContainsKey(method.ToString()) ? 0 : periods.IndexOf(m_settings.Periods[method.ToString()]));
                 }
             }
         }
