@@ -32,6 +32,8 @@ namespace EVEMon.Common.SettingsObjects
                     return TimeSpan.FromMinutes(10);
                 case UpdatePeriod.Minutes15:
                     return TimeSpan.FromMinutes(15);
+                case UpdatePeriod.Minutes20:
+                    return TimeSpan.FromMinutes(20);
                 case UpdatePeriod.Minutes30:
                     return TimeSpan.FromMinutes(30);
                 case UpdatePeriod.Hours1:
