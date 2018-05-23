@@ -7,6 +7,15 @@ namespace EVEMon.Common.Attributes
     public sealed class UpdateAttribute : Attribute
     {
         #region Constructors
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="defaultPeriod">Default length of time between updates.</param>
+        /// <param name="minimum">Minimum length of time between updates.</param>
+        public UpdateAttribute(UpdatePeriod defaultPeriod, UpdatePeriod minimum)
+        {
+            CreateUpdateAttribute(defaultPeriod, minimum, UpdatePeriod.Week, CacheStyle.Short);
+        }
 
         /// <summary>
         /// Constructor.

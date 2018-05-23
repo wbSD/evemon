@@ -2,6 +2,7 @@ using EVEMon.Common.Attributes;
 
 namespace EVEMon.Common.Enumerations.UISettings
 {
+    // TODO: This should be phased out, as ESI relies on cached results instead of rate limiting
     public enum CacheStyle
     {
         /// <summary>
