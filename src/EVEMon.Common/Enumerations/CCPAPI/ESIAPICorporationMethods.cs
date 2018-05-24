@@ -20,8 +20,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Market Orders")]
         [Description("The corporation market orders of a character.")]
-        [Update(UpdatePeriod.Hours1, UpdatePeriod.Hours1, CacheStyle.Long)]
         [ESIMethod("/v2/corporations/{0:D}/orders/", Scope = "esi-markets.read_corporation_orders.v1")]
+        [Update(UpdatePeriod.Hours1, UpdatePeriod.Hours1)]
         CorporationMarketOrders = 1 << 1,
 
         /// <summary>
@@ -29,8 +29,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Contracts")]
         [Description("The corporation contracts of a character.")]
-        [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes15, CacheStyle.Long)]
         [ESIMethod("/v1/corporations/{0:D}/contracts/", Scope = "esi-contracts.read_corporation_contracts.v1")]
+        [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes15)]
         CorporationContracts = 1 << 2,
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Industry Jobs")]
         [Description("The corporation industry jobs of a character.")]
-        [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes15, CacheStyle.Long)]
         [ESIMethod("/v1/corporations/{0:D}/industry/jobs/", Scope = "esi-industry.read_corporation_jobs.v1")]
+        [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes15)]
         CorporationIndustryJobs = 1 << 3,
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Medals")]
         [Description("The medals created by a corporation.")]
-        [Update(UpdatePeriod.Hours6, UpdatePeriod.Hours6, CacheStyle.Short)]
         [ESIMethod("/v1/corporations/{0:D}/medals/", Scope = "esi-corporations.read_medals.v1")]
+        [Update(UpdatePeriod.Hours6, UpdatePeriod.Hours6)]
         CorporationMedals = 1 << 11,
 
         /// <summary>
