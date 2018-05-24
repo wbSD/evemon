@@ -29,12 +29,13 @@ namespace EVEMon.Common.Net
         /// <param name="responseCode">The server response code.</param>
         /// <param name="serverTime">The time on the server.</param>
         public DownloadResult(T result, HttpWebClientServiceException error, int responseCode,
-            DateTime serverTime)
+            DateTime serverTime, DateTime? expires = null)
         {
             Error = error;
             Result = result;
             ResponseCode = responseCode;
             ServerTime = serverTime;
+            Expires = expires;
         }
 
         /// <summary>
@@ -60,5 +61,7 @@ namespace EVEMon.Common.Net
         /// </summary>
         /// <value>The time on the server, in UTC.</value>
         public DateTime ServerTime { get; }
+
+        public DateTime? Expires { get; }
     }
 }
