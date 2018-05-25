@@ -29,8 +29,6 @@ namespace EVEMon.Common.QueryMonitor
         private readonly CCPCharacter m_ccpCharacter;
         private bool m_characterSheetUpdating = false;
 
-        // Responses from the attribute results since we handle it manually
-        private ResponseParams m_attrResponse;
         // Result from the character skill queue to handle a pathological case where skill
         // queues were not-modified but need to be re-imported due to a skills list change
         private EsiAPISkillQueue m_lastQueue;
@@ -49,7 +47,6 @@ namespace EVEMon.Common.QueryMonitor
             var notifiers = EveMonClient.Notifications;
             m_ccpCharacter = ccpCharacter;
             m_characterQueryMonitors = new List<IQueryMonitorEx>();
-            m_attrResponse = null;
             m_lastQueue = null;
 
             // Add the monitors in an order as they will appear in the throbber menu
@@ -68,7 +65,11 @@ namespace EVEMon.Common.QueryMonitor
             // Implants
             m_characterQueryMonitors.Add(new CharacterQueryMonitor<List<int>>(
                 ccpCharacter, ESIAPICharacterMethods.Implants, OnCharacterImplantsUpdated,
-                OnCharacterImplantsFailed));
+                notifiers.NotifyCharacterImplantsError));
+            // Attributes
+            m_characterQueryMonitors.Add(new CharacterQueryMonitor<EsiAPIAttributes>(
+                ccpCharacter, ESIAPICharacterMethods.Attributes, OnCharacterAttributesUpdated,
+                notifiers.NotifyCharacterAttributesError));
             // Ship
             m_characterQueryMonitors.Add(new CharacterQueryMonitor<EsiAPIShip>(
                 ccpCharacter, ESIAPICharacterMethods.Ship, OnCharacterShipUpdated,
@@ -250,7 +251,15 @@ namespace EVEMon.Common.QueryMonitor
 
 
         #region Querying
-        
+        /// <summary>
+        /// Flag that we are waiting for character sheet operations to finish
+        /// </summary>
+        private void FlagCharacterSheetUpdating()
+        {
+            if (!m_characterSheetUpdating)
+                m_characterSheetUpdating = true;
+        }
+
         /// <summary>
         /// Check if any character sheet related query monitors are still running, and trigger
         /// events if they are all completed.
@@ -258,10 +267,7 @@ namespace EVEMon.Common.QueryMonitor
         private void FinishCharacterSheetUpdated()
         {
             // Check if all CharacterSheet related query monitors have completed
-            if (!m_characterQueryMonitors.Any(monitor => (ESIAPICharacterMethods.
-                CharacterSheet.Equals(monitor.Method) || monitor.Method.HasParent(
-                ESIAPICharacterMethods.CharacterSheet)) && monitor.Status == QueryStatus.
-                Updating))
+            if (!m_basicFeaturesMonitors.Any(monitor => monitor.Status == QueryStatus.Updating))
             {
                 m_characterSheetUpdating = false;
                 var target = m_ccpCharacter;
@@ -286,9 +292,7 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnCharacterSheetUpdated(EsiAPICharacterSheet result)
         {
-            // Flag that we are waiting for character sheet operations to finish
-            if (!m_characterSheetUpdating)
-                m_characterSheetUpdating = true;
+            FlagCharacterSheetUpdating();
 
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
@@ -302,6 +306,8 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnCharacterLocationUpdated(EsiAPILocation result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
@@ -314,6 +320,8 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnCharacterClonesUpdated(EsiAPIClones result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
@@ -326,67 +334,26 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnCharacterImplantsUpdated(List<int> result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
-            {
                 target.Import(result);
-                QueryAttributesAsync(target);
-            }
-        }
-
-        /// <summary>
-        /// Notifies the user if character implants could not be queried, but continues to
-        /// query the attributes even if this occurs.
-        /// </summary>
-        /// <param name="character"></param>
-        /// <param name="result"></param>
-        private void OnCharacterImplantsFailed(CCPCharacter character, EsiResult<List<int>>
-            result)
-        {
-            EveMonClient.Notifications.NotifyCharacterImplantsError(character, result);
-            var target = m_ccpCharacter;
-            // Character may have been deleted since we queried
-            if (target != null)
-                QueryAttributesAsync(target);
-        }
-
-        /// <summary>
-        /// Queries the character's attributes. Called on success or failure of implant
-        /// import as attributes must be done second.
-        /// </summary>
-        private void QueryAttributesAsync(CCPCharacter target)
-        {
-            // This is only invoked where the character has already been checked against null
-            ESIKey esiKey = target.Identity.FindAPIKeyWithAccess(ESIAPICharacterMethods.
-                Attributes);
-            if (esiKey != null)
-                EveMonClient.APIProviders.CurrentProvider.QueryEsi<EsiAPIAttributes>(
-                    ESIAPICharacterMethods.Attributes, OnCharacterAttributesUpdated,
-                    new ESIParams(m_attrResponse, esiKey.AccessToken)
-                    {
-                        ParamOne = target.CharacterID
-                    });
         }
 
         /// <summary>
         /// Processes the queried character's attributes.
         /// </summary>
         /// <param name="result"></param>
-        /// <param name="ignore"></param>
-        private void OnCharacterAttributesUpdated(EsiResult<EsiAPIAttributes> result,
-            object ignore)
+        private void OnCharacterAttributesUpdated(EsiAPIAttributes result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
-            m_attrResponse = result.Response;
             // Character may have been deleted since we queried
-            if (target != null && target.Monitored)
-            {
-                if (target.ShouldNotifyError(result, ESIAPICharacterMethods.Attributes))
-                    EveMonClient.Notifications.NotifyCharacterAttributesError(target, result);
-                if (!result.HasError && result.HasData)
-                    target.Import(result.Result);
-            }
+            if (target != null)
+                target.Import(result);
         }
 
         /// <summary>
@@ -395,6 +362,8 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnCharacterShipUpdated(EsiAPIShip result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
@@ -407,6 +376,8 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnCharacterSkillsUpdated(EsiAPISkills result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
@@ -419,6 +390,8 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnCharacterEmploymentUpdated(EsiAPIEmploymentHistory result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
@@ -431,6 +404,8 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnSkillQueueUpdated(EsiAPISkillQueue result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
@@ -552,6 +527,8 @@ namespace EVEMon.Common.QueryMonitor
         /// <param name="result"></param>
         private void OnWalletBalanceUpdated(string result)
         {
+            FlagCharacterSheetUpdating();
+
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
