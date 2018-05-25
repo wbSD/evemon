@@ -20,7 +20,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Wallet Balance")]
         [Description("The wallet balance of a character.")]
-        [Parent(CharacterSheet)]
         [ESIMethod("/v1/characters/{0:D}/wallet/", Scope = "esi-wallet.read_character_wallet.v1")]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Minutes2)]
         AccountBalance = 1 << 0,
@@ -66,7 +65,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Jump Clones")]
         [Description("The jump clones of a character.")]
-        [Parent(CharacterSheet)]
         [ESIMethod("/v3/characters/{0:D}/clones/", Scope = "esi-clones.read_clones.v1")]
         [Update(UpdatePeriod.Hours1, UpdatePeriod.Minutes2)]
         Clones = 1 << 5,
@@ -113,7 +111,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The employment history of a character.
         /// </summary>
-        [Parent(CharacterSheet)]
         [ESIMethod("/v1/characters/{0:D}/corporationhistory/")]
         [Update(UpdatePeriod.Hours2, UpdatePeriod.Hours1)]
         EmploymentHistory = 1 << 11,
@@ -132,7 +129,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Implants")]
         [Description("The current implants of a character.")]
-        [Parent(CharacterSheet)]
         [ESIMethod("/v1/characters/{0:D}/implants/", Scope = "esi-clones.read_implants.v1")]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Minutes5)]
         Implants = 1 << 13,
@@ -169,7 +165,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Location")]
         [Description("The current location of a character.")]
-        [Parent(CharacterSheet)]
         [ESIMethod("/v1/characters/{0:D}/location/", Scope = "esi-location.read_location.v1")]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Seconds5)]
         Location = 1 << 17,
@@ -253,7 +248,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Ship")]
         [Description("The current ship of a character.")]
-        [Parent(CharacterSheet)]
         [ESIMethod("/v1/characters/{0:D}/ship/", Scope = "esi-location.read_ship_type.v1")]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Seconds5)]
         Ship = 1 << 27,
@@ -272,7 +266,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Skills")]
         [Description("The skills of a character.")]
-        [Parent(CharacterSheet)]
         [ESIMethod("/v4/characters/{0:D}/skills/", Scope = "esi-skills.read_skills.v1")]
         [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes2)]
         Skills = 1 << 29,
