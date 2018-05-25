@@ -17,7 +17,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         [Header("EVE Server Status")]
         [Description("The status of the EVE server.")]
         [ESIMethod("/v1/status/")]
-        [Update(UpdatePeriod.Minutes5, UpdatePeriod.Never, UpdatePeriod.Hours1)]
+        [Update(UpdatePeriod.Minutes5, UpdatePeriod.Seconds30, UpdatePeriod.Hours1)]
         ServerStatus,
 
         /// <summary>
