@@ -907,7 +907,25 @@ namespace EVEMon.Common.Models
                     ID = implant,
                     Name = StaticItems.GetItemName(implant)
                 });
+            // Store the old base attributes, we need it for evaluating the attributes after import
+            var oldBaseAttributes = new long[m_attributes.Length];
+            bool anyPreviousImplants = false;
+            for (int i = 0; i < m_attributes.Length; i++)
+            {
+                oldBaseAttributes[i] = GetAttribute((EveAttribute)i).Base;
+                if (CurrentImplants[(EveAttribute)i].ID != new Implant((ImplantSlots)i).ID)
+                    anyPreviousImplants = true;
+            }
             CurrentImplants.Import(newImplants);
+            // Set the attribute values again, since ESI reports attributes including implant bonus.
+            // We might have imported attributes before implants, so now it needs to be adjusted.
+            if (!anyPreviousImplants)
+            {
+                for (int i = 0; i < oldBaseAttributes.Length; i++)
+                {
+                    SetAttribute((EveAttribute)i, (int)oldBaseAttributes[i]);
+                }
+            }
         }
 
         /// <summary>
