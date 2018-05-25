@@ -18,7 +18,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// A character's wallet balance.
         /// </summary>
-        [Parent(CharacterSheet)]
         AccountBalance = 1 << 0,
 
         /// <summary>
@@ -58,7 +57,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The clones of a character.
         /// </summary>
-        [Parent(CharacterSheet)]
         Clones = 1 << 5,
 
         /// <summary>
@@ -95,7 +93,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The employment history of a character.
         /// </summary>
-        [Parent(CharacterSheet)]
         EmploymentHistory = 1 << 11,
 
         /// <summary>
@@ -109,7 +106,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The active implants of a character.
         /// </summary>
-        [Parent(CharacterSheet)]
         Implants = 1 << 13,
 
         /// <summary>
@@ -136,7 +132,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// Allows the fetching of coordinate and name data for items owned by the character.
         /// </summary>
-        [Parent(CharacterSheet)]
         Location = 1 << 17,
 
         /// <summary>
@@ -206,7 +201,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The current ship of a character.
         /// </summary>
-        [Parent(CharacterSheet)]
         Ship = 1 << 27,
 
         /// <summary>
@@ -220,7 +214,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The skills of a character.
         /// </summary>
-        [Parent(CharacterSheet)]
         Skills = 1 << 29,
 
         /// <summary>
