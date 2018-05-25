@@ -37,9 +37,9 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The attributes of a character.
         /// </summary>
-        [ESIMethod("/v1/characters/{0:D}/attributes/", Scope = "esi-skills.read_skills.v1")]
         [Header("Attributes")]
         [Description("The attributes of a character.")]
+        [ESIMethod("/v1/characters/{0:D}/attributes/", Scope = "esi-skills.read_skills.v1")]
         [Update(UpdatePeriod.Hours2, UpdatePeriod.Hours1)]
         Attributes = 1 << 2,
 
@@ -149,9 +149,9 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The jump fatigue of a character.
         /// </summary>
-        [ESIMethod("/v1/characters/{0:D}/fatigue/", Scope = "esi-characters.read_fatigue.v1")]
         [Header("Jump Fatigue")]
         [Description("The jump fatigue of a character.")]
+        [ESIMethod("/v1/characters/{0:D}/fatigue/", Scope = "esi-characters.read_fatigue.v1")]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Minutes5)]
         JumpFatigue = 1 << 15,
 
