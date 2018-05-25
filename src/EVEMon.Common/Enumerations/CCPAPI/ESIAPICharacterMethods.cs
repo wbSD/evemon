@@ -40,7 +40,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         [Header("Attributes")]
         [Description("The attributes of a character.")]
         [ESIMethod("/v1/characters/{0:D}/attributes/", Scope = "esi-skills.read_skills.v1")]
-        [Update(UpdatePeriod.Hours2, UpdatePeriod.Hours1)]
+        [Update(UpdatePeriod.Minutes30, UpdatePeriod.Minutes5)]
         Attributes = 1 << 2,
 
         /// <summary>
