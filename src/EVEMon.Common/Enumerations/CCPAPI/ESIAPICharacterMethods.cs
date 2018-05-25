@@ -37,7 +37,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Attributes")]
         [Description("The attributes of a character.")]
-        [Update(UpdatePeriod.Hours2, UpdatePeriod.Hours1)]
+        [Update(UpdatePeriod.Minutes30, UpdatePeriod.Minutes5)]
         Attributes = 1 << 2,
 
         /// <summary>
