@@ -20,7 +20,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Wallet Balance")]
         [Description("The wallet balance of a character.")]
-        [Parent(CharacterSheet)]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Minutes2)]
         AccountBalance = 1 << 0,
 
@@ -61,7 +60,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Jump Clones")]
         [Description("The jump clones of a character.")]
-        [Parent(CharacterSheet)]
         [Update(UpdatePeriod.Hours1, UpdatePeriod.Minutes2)]
         Clones = 1 << 5,
 
@@ -102,7 +100,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The employment history of a character.
         /// </summary>
-        [Parent(CharacterSheet)]
         [Update(UpdatePeriod.Hours2, UpdatePeriod.Hours1)]
         EmploymentHistory = 1 << 11,
 
@@ -119,7 +116,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Implants")]
         [Description("The current implants of a character.")]
-        [Parent(CharacterSheet)]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Minutes5)]
         Implants = 1 << 13,
 
@@ -152,7 +148,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Location")]
         [Description("The current location of a character.")]
-        [Parent(CharacterSheet)]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Seconds5)]
         Location = 1 << 17,
 
@@ -226,7 +221,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Ship")]
         [Description("The current ship of a character.")]
-        [Parent(CharacterSheet)]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Seconds5)]
         Ship = 1 << 27,
 
@@ -243,7 +237,6 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Skills")]
         [Description("The skills of a character.")]
-        [Parent(CharacterSheet)]
         [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes2)]
         Skills = 1 << 29,
 
