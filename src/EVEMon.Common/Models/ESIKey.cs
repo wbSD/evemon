@@ -62,6 +62,10 @@ namespace EVEMon.Common.Models
             RefreshToken = serial.RefreshToken;
             CharacterAccessMask = serial.CharacterAccessMask;
             CorporationAccessMask = serial.CorporationAccessMask;
+            // Backward compatibility - if the old AccessMask had max value, it should have access to all scopes...
+            if (CharacterAccessMask == 0UL && CorporationAccessMask == 0UL && serial.AccessMask == ulong.MaxValue)
+                CharacterAccessMask = CorporationAccessMask = serial.AccessMask;
+
             m_monitored = serial.Monitored;
         }
 
@@ -447,6 +451,8 @@ namespace EVEMon.Common.Models
                 RefreshToken = RefreshToken,
                 CharacterAccessMask = CharacterAccessMask,
                 CorporationAccessMask = CorporationAccessMask,
+                // Backward compatibility - if the old AccessMask had max value, it should have access to all scopes...
+                AccessMask = (CharacterAccessMask == ulong.MaxValue && CorporationAccessMask == ulong.MaxValue) ? ulong.MaxValue : 0UL,
                 Monitored = m_monitored,
             };
 

@@ -19,6 +19,9 @@ namespace EVEMon.Common.Serialization.Settings
         [XmlAttribute("refreshToken")]
         public string RefreshToken { get; set; }
 
+        [XmlAttribute("accessMask")]
+        public ulong AccessMask { get; set; }
+
         [XmlAttribute("characterAccessMask")]
         public ulong CharacterAccessMask { get; set; }
 
