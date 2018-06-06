@@ -102,6 +102,12 @@
     <Compile Include="ApiCredentialsManagement\CharacterImportationWindow.Designer.cs">
       <DependentUpon>CharacterImportationWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApiCredentialsManagement\ESIScopesWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiCredentialsManagement\ESIScopesWindow.Designer.cs">
+      <DependentUpon>ESIScopesWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApiErrorHandling\ApiErrorWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -519,6 +525,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApiCredentialsManagement\CharacterImportationWindow.resx">
       <DependentUpon>CharacterImportationWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiCredentialsManagement\ESIScopesWindow.resx">
+      <DependentUpon>ESIScopesWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CharacterMonitoring\CharacterAssetsList.resx">
       <DependentUpon>CharacterAssetsList.cs</DependentUpon>
