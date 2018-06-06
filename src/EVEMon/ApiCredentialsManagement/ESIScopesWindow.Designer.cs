@@ -342,7 +342,7 @@
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.tabControl);
             this.Name = "ESIScopesWindow";
-            this.Text = "ESIScopesWindow";
+            this.Text = "ESI Scopes";
             this.tabControl.ResumeLayout(false);
             this.simpleTabPage.ResumeLayout(false);
             this.simplePanel.ResumeLayout(false);
