@@ -130,7 +130,7 @@ namespace EVEMon.Common.Service
             return "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_clientID +
                 ":" + m_secret));
         }
-        
+
         /// <summary>
         /// Spawns a browser for the user to log in; the port is the location of the local
         /// web server which receives the response, the state is used to stop XSRF
@@ -138,11 +138,16 @@ namespace EVEMon.Common.Service
         /// </summary>
         /// <param name="state">The random state parameter used to stop cross-site forgery.</param>
         /// <param name="port">The port used for the response.</param>
-        public void SpawnBrowserForLogin(string state, int port)
+        /// <param name="scopes">The scopes to request</param>
+        public void SpawnBrowserForLogin(string state, int port, string scopes)
         {
+            // If no scopes were requested, use the default
+            if (string.IsNullOrEmpty(scopes))
+                scopes = m_scopes;
+
             string redirect = string.Format(NetworkConstants.SSORedirect, port);
             string url = string.Format(NetworkConstants.SSOBase + NetworkConstants.SSOLogin,
-                WebUtility.UrlEncode(redirect), state, m_scopes, m_clientID);
+                WebUtility.UrlEncode(redirect), state, scopes, m_clientID);
             Util.OpenURL(new Uri(url));
         }
     }

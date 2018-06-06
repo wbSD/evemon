@@ -26,6 +26,7 @@ namespace EVEMon.ApiCredentialsManagement
         private ESIKeyCreationEventArgs m_creationArgs;
         private readonly SSOWebServer m_server;
         private readonly string m_state;
+        private string m_scopes = null;
 
         /// <summary>
         /// Constructor for new ESI credential.
@@ -374,7 +375,30 @@ namespace EVEMon.ApiCredentialsManagement
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void ButtonESILogin_Click(object sender, EventArgs e)
         {
-            m_authService?.SpawnBrowserForLogin(m_state, SSOWebServer.PORT);
+            m_authService?.SpawnBrowserForLogin(m_state, SSOWebServer.PORT, m_scopes);
+        }
+
+        /// <summary>
+        /// Event handler for button that open ESI scopes window
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void scopesButton_Click(object sender, EventArgs e)
+        {
+            using(var window = new ESIScopesWindow(m_esiKey))
+            {
+                window.ESIScopesEvent += Window_ESIScopesEvent;
+                window.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Event handler for ESI scopes window event
+        /// </summary>
+        /// <param name="scopes"></param>
+        private void Window_ESIScopesEvent(string scopes)
+        {
+            m_scopes = scopes;
         }
     }
 }
