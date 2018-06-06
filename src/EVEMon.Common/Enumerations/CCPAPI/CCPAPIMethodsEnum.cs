@@ -11,7 +11,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         None = 0,
 
         /// <summary>
-        /// The basic character features of APIMethodsEnum.
+        /// The basic character features of ESIAPICharacterMethods.
         /// </summary>
         BasicCharacterFeatures = ESIAPICharacterMethods.AccountBalance |
             ESIAPICharacterMethods.Attributes | ESIAPICharacterMethods.CharacterSheet |
@@ -21,7 +21,17 @@ namespace EVEMon.Common.Enumerations.CCPAPI
             ESIAPICharacterMethods.Skills,
 
         /// <summary>
-        /// The advanced character features of APIMethodsEnum.
+        /// The character asset features of ESIAPICharacterMethods
+        /// </summary>
+        AssetCharacterFeatures = ESIAPICharacterMethods.AssetList,
+
+        /// <summary>
+        /// The character contract & market features of ESIAPICharacterMethods
+        /// </summary>
+        ContractMarketCharacterFeatures = ESIAPICharacterMethods.Contracts | ESIAPICharacterMethods.MarketOrders,
+
+        /// <summary>
+        /// The advanced character features of ESIAPICharacterMethods.
         /// </summary>
         AdvancedCharacterFeatures = ESIAPICharacterMethods.AssetList |
             ESIAPICharacterMethods.CalendarEventAttendees | ESIAPICharacterMethods.ContactList |
@@ -38,7 +48,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
             ESIAPICharacterMethods.WalletJournal | ESIAPICharacterMethods.WalletTransactions,
 
         /// <summary>
-        /// The advanced corporation features of APIMethodsEnum.
+        /// The advanced corporation features of ESIAPICorporationMethods.
         /// </summary>
         AdvancedCorporationFeatures = ESIAPICorporationMethods.CorporationContracts |
             ESIAPICorporationMethods.CorporationMedals |
@@ -46,7 +56,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
             ESIAPICorporationMethods.CorporationIndustryJobs,
 
         /// <summary>
-        /// All character features of APIMethodsEnum
+        /// All character features of ESIAPICharacterMethods
         /// </summary>
         AllCharacterFeatures = BasicCharacterFeatures | AdvancedCharacterFeatures,
     }
