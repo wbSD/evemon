@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.tabControl = new System.Windows.Forms.TabControl();
-            this.simpleTabPage = new System.Windows.Forms.TabPage();
-            this.simplePanel = new System.Windows.Forms.Panel();
+            this.basicTabPage = new System.Windows.Forms.TabPage();
+            this.basicPanel = new System.Windows.Forms.Panel();
             this.corporationLabel = new System.Windows.Forms.Label();
             this.contractMarketLabel = new System.Windows.Forms.Label();
             this.assetsLabel = new System.Windows.Forms.Label();
@@ -54,8 +54,8 @@
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
-            this.simpleTabPage.SuspendLayout();
-            this.simplePanel.SuspendLayout();
+            this.basicTabPage.SuspendLayout();
+            this.basicPanel.SuspendLayout();
             this.advancedTabPage.SuspendLayout();
             this.advancedFlowLayoutPanel.SuspendLayout();
             this.characterMethodsFlowLayoutPanel.SuspendLayout();
@@ -71,7 +71,7 @@
             this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl.Controls.Add(this.simpleTabPage);
+            this.tabControl.Controls.Add(this.basicTabPage);
             this.tabControl.Controls.Add(this.advancedTabPage);
             this.tabControl.Controls.Add(this.scopesTabPage);
             this.tabControl.Location = new System.Drawing.Point(12, 12);
@@ -80,32 +80,32 @@
             this.tabControl.Size = new System.Drawing.Size(582, 397);
             this.tabControl.TabIndex = 0;
             // 
-            // simpleTabPage
+            // basicTabPage
             // 
-            this.simpleTabPage.Controls.Add(this.simplePanel);
-            this.simpleTabPage.Location = new System.Drawing.Point(4, 22);
-            this.simpleTabPage.Name = "simpleTabPage";
-            this.simpleTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.simpleTabPage.Size = new System.Drawing.Size(574, 371);
-            this.simpleTabPage.TabIndex = 0;
-            this.simpleTabPage.Text = "Simple";
-            this.simpleTabPage.UseVisualStyleBackColor = true;
+            this.basicTabPage.Controls.Add(this.basicPanel);
+            this.basicTabPage.Location = new System.Drawing.Point(4, 22);
+            this.basicTabPage.Name = "basicTabPage";
+            this.basicTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.basicTabPage.Size = new System.Drawing.Size(574, 371);
+            this.basicTabPage.TabIndex = 0;
+            this.basicTabPage.Text = "Basic";
+            this.basicTabPage.UseVisualStyleBackColor = true;
             // 
-            // simplePanel
+            // basicPanel
             // 
-            this.simplePanel.Controls.Add(this.corporationLabel);
-            this.simplePanel.Controls.Add(this.contractMarketLabel);
-            this.simplePanel.Controls.Add(this.assetsLabel);
-            this.simplePanel.Controls.Add(this.coreFeaturesLabel);
-            this.simplePanel.Controls.Add(this.corporationCheckBox);
-            this.simplePanel.Controls.Add(this.contractMarketCheckBox);
-            this.simplePanel.Controls.Add(this.assetsCheckBox);
-            this.simplePanel.Controls.Add(this.coreFeaturesCheckBox);
-            this.simplePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.simplePanel.Location = new System.Drawing.Point(3, 3);
-            this.simplePanel.Name = "simplePanel";
-            this.simplePanel.Size = new System.Drawing.Size(568, 365);
-            this.simplePanel.TabIndex = 0;
+            this.basicPanel.Controls.Add(this.corporationLabel);
+            this.basicPanel.Controls.Add(this.contractMarketLabel);
+            this.basicPanel.Controls.Add(this.assetsLabel);
+            this.basicPanel.Controls.Add(this.coreFeaturesLabel);
+            this.basicPanel.Controls.Add(this.corporationCheckBox);
+            this.basicPanel.Controls.Add(this.contractMarketCheckBox);
+            this.basicPanel.Controls.Add(this.assetsCheckBox);
+            this.basicPanel.Controls.Add(this.coreFeaturesCheckBox);
+            this.basicPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.basicPanel.Location = new System.Drawing.Point(3, 3);
+            this.basicPanel.Name = "basicPanel";
+            this.basicPanel.Size = new System.Drawing.Size(568, 365);
+            this.basicPanel.TabIndex = 0;
             // 
             // corporationLabel
             // 
@@ -344,8 +344,8 @@
             this.Name = "ESIScopesWindow";
             this.Text = "ESI Scopes";
             this.tabControl.ResumeLayout(false);
-            this.simpleTabPage.ResumeLayout(false);
-            this.simplePanel.ResumeLayout(false);
+            this.basicTabPage.ResumeLayout(false);
+            this.basicPanel.ResumeLayout(false);
             this.advancedTabPage.ResumeLayout(false);
             this.advancedFlowLayoutPanel.ResumeLayout(false);
             this.advancedFlowLayoutPanel.PerformLayout();
@@ -367,11 +367,11 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage simpleTabPage;
+        private System.Windows.Forms.TabPage basicTabPage;
         private System.Windows.Forms.TabPage advancedTabPage;
         private System.Windows.Forms.TabPage scopesTabPage;
         private System.Windows.Forms.Button saveButton;
-        private System.Windows.Forms.Panel simplePanel;
+        private System.Windows.Forms.Panel basicPanel;
         private System.Windows.Forms.CheckBox assetsCheckBox;
         private System.Windows.Forms.CheckBox coreFeaturesCheckBox;
         private System.Windows.Forms.CheckBox contractMarketCheckBox;

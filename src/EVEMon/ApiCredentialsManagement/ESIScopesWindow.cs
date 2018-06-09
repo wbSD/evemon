@@ -1,4 +1,5 @@
-﻿using EVEMon.Common.Collections;
+﻿using EVEMon.Common;
+using EVEMon.Common.Collections;
 using EVEMon.Common.Controls;
 using EVEMon.Common.Enumerations.CCPAPI;
 using EVEMon.Common.Extensions;
@@ -35,6 +36,8 @@ namespace EVEMon.ApiCredentialsManagement
         private readonly ToolTip m_tooltip;
 
         private readonly ESIKey m_esiKey;
+
+        private bool m_update_basic_checkboxes = false;
         #endregion
 
         public delegate void ESIScopesDelegate(string scopes);
@@ -56,6 +59,24 @@ namespace EVEMon.ApiCredentialsManagement
             };
 
             LoadESIMethods();
+
+            EveMonClient.TimerTick += EveMonClient_TimerTick;
+        }
+
+        /// <summary>
+        /// Handles the TimerTick event of the EveMonClient control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void EveMonClient_TimerTick(object sender, EventArgs e)
+        {
+            if (m_update_basic_checkboxes)
+            {
+                m_update_basic_checkboxes = false;
+
+                SetBasicCharacterCheckStates();
+                SetBasicCorporationCheckState();
+            }
         }
 
         /// <summary>
@@ -161,15 +182,15 @@ namespace EVEMon.ApiCredentialsManagement
 
             // Set flags and hook up event
             coreFeaturesCheckBox.Tag = coreFeatures;
-            coreFeaturesCheckBox.CheckedChanged += SimpleCheckBox_CheckedChanged;
+            coreFeaturesCheckBox.CheckedChanged += BasicCheckBox_CheckedChanged;
             coreFeaturesLabel.Text = string.Join(", ", coreFeaturesDescription);
 
             assetsCheckBox.Tag = assetFeatures;
-            assetsCheckBox.CheckedChanged += SimpleCheckBox_CheckedChanged;
+            assetsCheckBox.CheckedChanged += BasicCheckBox_CheckedChanged;
             assetsLabel.Text = string.Join(", ", assetFeaturesDescription);
 
             contractMarketCheckBox.Tag = contractMarketFeatures;
-            contractMarketCheckBox.CheckedChanged += SimpleCheckBox_CheckedChanged;
+            contractMarketCheckBox.CheckedChanged += BasicCheckBox_CheckedChanged;
             contractMarketLabel.Text = string.Join(", ", contractMarketFeaturesDescription);
 
             // Corporation
@@ -187,7 +208,7 @@ namespace EVEMon.ApiCredentialsManagement
 
             // Set flags and hook up event
             corporationCheckBox.Tag = corporationFeatures;
-            corporationCheckBox.CheckedChanged += SimpleCheckBox_CheckedChanged;
+            corporationCheckBox.CheckedChanged += BasicCheckBox_CheckedChanged;
             corporationLabel.Text = string.Join(", ", advancedCorpFeaturesDescription);
         }
 
@@ -267,6 +288,9 @@ namespace EVEMon.ApiCredentialsManagement
                     if (((ulong)m & m_esiKey.CorporationAccessMask) == (ulong)m)
                         CorporationMethodChecked(m, true);
             }
+
+            // Trigger the timer tick to properly check the basic tab checkboxes
+            EveMonClient_TimerTick(null, null);
         }
 
         /// <summary>
@@ -358,11 +382,11 @@ namespace EVEMon.ApiCredentialsManagement
 
         #region Handle check/uncheck of checkboxes
         /// <summary>
-        /// Event handler for checkboxes on Simple tab
+        /// Event handler for checkboxes on basic tab
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SimpleCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void BasicCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (sender is CheckBox cb)
                 if (cb.Tag is ESIAPICharacterMethods method)
@@ -408,20 +432,20 @@ namespace EVEMon.ApiCredentialsManagement
         }
 
         /// <summary>
-        /// Set the correct ThreeState for the character feature checkboxes in the Simple tab
+        /// Set the correct ThreeState for the character feature checkboxes in the basic tab
         /// </summary>
-        private void SetSimpleCharacterCheckStates()
+        private void SetBasicCharacterCheckStates()
         {
-            SetSimpleCharacterCheckState(coreFeaturesCheckBox);
-            SetSimpleCharacterCheckState(assetsCheckBox);
-            SetSimpleCharacterCheckState(contractMarketCheckBox);
+            SetBasicCharacterCheckState(coreFeaturesCheckBox);
+            SetBasicCharacterCheckState(assetsCheckBox);
+            SetBasicCharacterCheckState(contractMarketCheckBox);
         }
 
         /// <summary>
         /// Set ThreeState for a character feature checkbox
         /// </summary>
         /// <param name="cb"></param>
-        private void SetSimpleCharacterCheckState(CheckBox cb)
+        private void SetBasicCharacterCheckState(CheckBox cb)
         {
             // Figure out what flags are currently set
             ESIAPICharacterMethods selected = ESIAPICharacterMethods.None;
@@ -446,7 +470,7 @@ namespace EVEMon.ApiCredentialsManagement
         /// Set the CheckedState of the the corporation features checkbox
         /// </summary>
         /// <param name="cb"></param>
-        private void SetSimpleCorporationCheckState()
+        private void SetBasicCorporationCheckState()
         {
             // Figure out what flags are currently set         
             ESIAPICorporationMethods selected = ESIAPICorporationMethods.None;
@@ -519,8 +543,8 @@ namespace EVEMon.ApiCredentialsManagement
             // Update the related scope checkbox
             m_character_scope_checkboxes[methodscope].Checked = isChecked;
 
-            // Update simple tab checkboxes
-            SetSimpleCharacterCheckStates();
+            // Update basic tab checkboxes
+            m_update_basic_checkboxes = true;
         }
 
         /// <summary>
@@ -537,8 +561,8 @@ namespace EVEMon.ApiCredentialsManagement
             // Update the related scope checkbox
             m_corporation_scope_checkboxes[methodscope].Checked = isChecked;
 
-            // Update simple tab checkboxes
-            SetSimpleCorporationCheckState();
+            // Update basic tab checkboxes
+            m_update_basic_checkboxes = true;
         }
 
         /// <summary>
@@ -546,12 +570,16 @@ namespace EVEMon.ApiCredentialsManagement
         /// </summary>
         /// <param name="scope"></param>
         /// <param name="add"></param>
-        private void AddOrRemoveScope(string scope, bool add)
+        private bool AddOrRemoveScope(string scope, bool add)
         {
+            bool selected = m_selected_scopes.Contains(scope);
+
             if (add)
                 m_selected_scopes.Add(scope);
             else
                 m_selected_scopes.Remove(scope);
+
+            return add != selected;
         }
         #endregion
 
