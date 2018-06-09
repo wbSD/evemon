@@ -53,6 +53,8 @@
             this.corporationScopesLabel = new System.Windows.Forms.Label();
             this.saveButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.industryLabel = new System.Windows.Forms.Label();
+            this.industryCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.basicTabPage.SuspendLayout();
             this.basicPanel.SuspendLayout();
@@ -93,6 +95,8 @@
             // 
             // basicPanel
             // 
+            this.basicPanel.Controls.Add(this.industryCheckBox);
+            this.basicPanel.Controls.Add(this.industryLabel);
             this.basicPanel.Controls.Add(this.corporationLabel);
             this.basicPanel.Controls.Add(this.contractMarketLabel);
             this.basicPanel.Controls.Add(this.assetsLabel);
@@ -109,39 +113,39 @@
             // 
             // corporationLabel
             // 
-            this.corporationLabel.Location = new System.Drawing.Point(162, 260);
+            this.corporationLabel.Location = new System.Drawing.Point(162, 245);
             this.corporationLabel.Name = "corporationLabel";
-            this.corporationLabel.Size = new System.Drawing.Size(375, 86);
+            this.corporationLabel.Size = new System.Drawing.Size(375, 40);
             this.corporationLabel.TabIndex = 7;
             this.corporationLabel.Text = "Here is some text about what Corporation is";
             // 
             // contractMarketLabel
             // 
-            this.contractMarketLabel.Location = new System.Drawing.Point(162, 181);
+            this.contractMarketLabel.Location = new System.Drawing.Point(162, 135);
             this.contractMarketLabel.Name = "contractMarketLabel";
-            this.contractMarketLabel.Size = new System.Drawing.Size(375, 79);
+            this.contractMarketLabel.Size = new System.Drawing.Size(375, 40);
             this.contractMarketLabel.TabIndex = 6;
             this.contractMarketLabel.Text = "Here is some text about what Market && Contract is";
             // 
             // assetsLabel
             // 
-            this.assetsLabel.Location = new System.Drawing.Point(162, 104);
+            this.assetsLabel.Location = new System.Drawing.Point(162, 80);
             this.assetsLabel.Name = "assetsLabel";
-            this.assetsLabel.Size = new System.Drawing.Size(375, 73);
+            this.assetsLabel.Size = new System.Drawing.Size(375, 40);
             this.assetsLabel.TabIndex = 5;
             this.assetsLabel.Text = "Here is some text about what Assets is";
             // 
             // coreFeaturesLabel
             // 
-            this.coreFeaturesLabel.Location = new System.Drawing.Point(162, 26);
+            this.coreFeaturesLabel.Location = new System.Drawing.Point(162, 25);
             this.coreFeaturesLabel.Name = "coreFeaturesLabel";
-            this.coreFeaturesLabel.Size = new System.Drawing.Size(375, 78);
+            this.coreFeaturesLabel.Size = new System.Drawing.Size(375, 40);
             this.coreFeaturesLabel.TabIndex = 4;
             this.coreFeaturesLabel.Text = "Here is some text about what Core Features is";
             // 
             // corporationCheckBox
             // 
-            this.corporationCheckBox.Location = new System.Drawing.Point(23, 260);
+            this.corporationCheckBox.Location = new System.Drawing.Point(23, 245);
             this.corporationCheckBox.Name = "corporationCheckBox";
             this.corporationCheckBox.Size = new System.Drawing.Size(133, 17);
             this.corporationCheckBox.TabIndex = 3;
@@ -151,7 +155,7 @@
             // 
             // contractMarketCheckBox
             // 
-            this.contractMarketCheckBox.Location = new System.Drawing.Point(23, 181);
+            this.contractMarketCheckBox.Location = new System.Drawing.Point(23, 135);
             this.contractMarketCheckBox.Name = "contractMarketCheckBox";
             this.contractMarketCheckBox.Size = new System.Drawing.Size(133, 17);
             this.contractMarketCheckBox.TabIndex = 2;
@@ -161,7 +165,7 @@
             // 
             // assetsCheckBox
             // 
-            this.assetsCheckBox.Location = new System.Drawing.Point(23, 104);
+            this.assetsCheckBox.Location = new System.Drawing.Point(23, 80);
             this.assetsCheckBox.Name = "assetsCheckBox";
             this.assetsCheckBox.Size = new System.Drawing.Size(133, 17);
             this.assetsCheckBox.TabIndex = 1;
@@ -171,7 +175,7 @@
             // 
             // coreFeaturesCheckBox
             // 
-            this.coreFeaturesCheckBox.Location = new System.Drawing.Point(23, 26);
+            this.coreFeaturesCheckBox.Location = new System.Drawing.Point(23, 25);
             this.coreFeaturesCheckBox.Name = "coreFeaturesCheckBox";
             this.coreFeaturesCheckBox.Size = new System.Drawing.Size(133, 17);
             this.coreFeaturesCheckBox.TabIndex = 0;
@@ -333,6 +337,24 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
             // 
+            // industryLabel
+            // 
+            this.industryLabel.Location = new System.Drawing.Point(162, 190);
+            this.industryLabel.Name = "industryLabel";
+            this.industryLabel.Size = new System.Drawing.Size(375, 40);
+            this.industryLabel.TabIndex = 8;
+            this.industryLabel.Text = "Here is some text about what Industry is";
+            // 
+            // industryCheckBox
+            // 
+            this.industryCheckBox.Location = new System.Drawing.Point(23, 190);
+            this.industryCheckBox.Name = "industryCheckBox";
+            this.industryCheckBox.Size = new System.Drawing.Size(133, 17);
+            this.industryCheckBox.TabIndex = 9;
+            this.industryCheckBox.Text = "Industry";
+            this.industryCheckBox.ThreeState = true;
+            this.industryCheckBox.UseVisualStyleBackColor = true;
+            // 
             // ESIScopesWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -391,5 +413,7 @@
         private System.Windows.Forms.FlowLayoutPanel corporationMethodsFlowLayoutPanel;
         private System.Windows.Forms.Label corporationMethodsLabel;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.CheckBox industryCheckBox;
+        private System.Windows.Forms.Label industryLabel;
     }
 }

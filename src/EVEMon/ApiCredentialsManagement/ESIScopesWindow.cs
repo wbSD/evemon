@@ -150,66 +150,67 @@ namespace EVEMon.ApiCredentialsManagement
         private void ConfigureBasicCheckBoxes()
         {
             // Character
-            var coreFeatures = ESIAPICharacterMethods.None;
-            var assetFeatures = ESIAPICharacterMethods.None;
-            var contractMarketFeatures = ESIAPICharacterMethods.None;
-            var basicCharacterFeatures = (ESIAPICharacterMethods)CCPAPIMethodsEnum.BasicCharacterFeatures;
-            var assetCharacterFeatures = (ESIAPICharacterMethods)CCPAPIMethodsEnum.AssetCharacterFeatures;
-            var contractMarketCharacterFeatures = (ESIAPICharacterMethods)CCPAPIMethodsEnum.ContractMarketCharacterFeatures;
-            var coreFeaturesDescription = new List<string>();
-            var assetFeaturesDescription = new List<string>();
-            var contractMarketFeaturesDescription = new List<string>();
+            ConfigureBasicCharacterCheckBox(coreFeaturesCheckBox, coreFeaturesLabel, (ESIAPICharacterMethods)CCPAPIMethodsEnum.BasicCharacterFeatures);
+            ConfigureBasicCharacterCheckBox(assetsCheckBox, assetsLabel, (ESIAPICharacterMethods)CCPAPIMethodsEnum.AssetCharacterFeatures);
+            ConfigureBasicCharacterCheckBox(contractMarketCheckBox, contractMarketLabel, (ESIAPICharacterMethods)CCPAPIMethodsEnum.ContractMarketCharacterFeatures);
+            ConfigureBasicCharacterCheckBox(industryCheckBox, industryLabel, (ESIAPICharacterMethods)CCPAPIMethodsEnum.IndustryCharacterFeatures);
 
-            // Get flags for the core/asset/contract+market features that require scopes
+            // Corporation
+            ConfigureBasicCorporationCheckBox(corporationCheckBox, corporationLabel, (ESIAPICorporationMethods)CCPAPIMethodsEnum.AdvancedCorporationFeatures);
+        }
+
+        /// <summary>
+        /// Configure a basic tab character feature checkbox
+        /// </summary>
+        /// <param name="checkbox">The checkbox to configure</param>
+        /// <param name="label">The label where the description will go</param>
+        /// <param name="flags">The character methods that the checkbox should apply to</param>
+        private void ConfigureBasicCharacterCheckBox(CheckBox checkbox, Label label, ESIAPICharacterMethods flags)
+        {
+            var features = ESIAPICharacterMethods.None;
+            var descriptions = new List<string>();
+
+            // Get flags and description for character methods that require scopes
             foreach (var m in m_character_methods)
             {
-                if ((m & basicCharacterFeatures) == m)
+                if ((m & flags) == m)
                 {
-                    coreFeatures = coreFeatures | m;
-                    coreFeaturesDescription.Add((m.HasHeader() ? m.GetHeader() : m.ToString()));
-                }
-                if ((m & assetCharacterFeatures) == m)
-                {
-                    assetFeatures = assetFeatures | m;
-                    assetFeaturesDescription.Add((m.HasHeader() ? m.GetHeader() : m.ToString()));
-                }
-                if ((m & contractMarketCharacterFeatures) == m)
-                {
-                    contractMarketFeatures = contractMarketFeatures | m;
-                    contractMarketFeaturesDescription.Add((m.HasHeader() ? m.GetHeader() : m.ToString()));
+                    features = features | m;
+                    descriptions.Add((m.HasHeader() ? m.GetHeader() : m.ToString()));
                 }
             }
 
-            // Set flags and hook up event
-            coreFeaturesCheckBox.Tag = coreFeatures;
-            coreFeaturesCheckBox.CheckedChanged += BasicCheckBox_CheckedChanged;
-            coreFeaturesLabel.Text = string.Join(", ", coreFeaturesDescription);
+            // Set flags, hook up event and set the description
+            checkbox.Tag = features;
+            checkbox.CheckedChanged += BasicCheckBox_CheckedChanged;
+            label.Text = string.Join(", ", descriptions);
+        }
 
-            assetsCheckBox.Tag = assetFeatures;
-            assetsCheckBox.CheckedChanged += BasicCheckBox_CheckedChanged;
-            assetsLabel.Text = string.Join(", ", assetFeaturesDescription);
+        /// <summary>
+        /// Configure a basic tab corporation feature checkbox
+        /// </summary>
+        /// <param name="checkbox">The checkbox to configure</param>
+        /// <param name="label">The label where the description will go</param>
+        /// <param name="flags">The character methods that the checkbox should apply to</param>
+        private void ConfigureBasicCorporationCheckBox(CheckBox checkbox, Label label, ESIAPICorporationMethods flags)
+        {
+            var features = ESIAPICorporationMethods.None;
+            var descriptions = new List<string>();
 
-            contractMarketCheckBox.Tag = contractMarketFeatures;
-            contractMarketCheckBox.CheckedChanged += BasicCheckBox_CheckedChanged;
-            contractMarketLabel.Text = string.Join(", ", contractMarketFeaturesDescription);
-
-            // Corporation
-            var corporationFeatures = ESIAPICorporationMethods.None;
-            var advancedCorpFeatures = (ESIAPICorporationMethods)CCPAPIMethodsEnum.AdvancedCorporationFeatures;
-            var advancedCorpFeaturesDescription = new List<string>();
-
-            // Get flags for the corporation features that requrie scopes
+            // Get flags and description for corporation methods that require scopes
             foreach (var m in m_corporation_methods)
-                if ((m & advancedCorpFeatures) == m)
+            {
+                if ((m & flags) == m)
                 {
-                    corporationFeatures = corporationFeatures | m;
-                    advancedCorpFeaturesDescription.Add((m.HasHeader() ? m.GetHeader() : m.ToString()));
+                    features = features | m;
+                    descriptions.Add((m.HasHeader() ? m.GetHeader() : m.ToString()));
                 }
+            }
 
-            // Set flags and hook up event
-            corporationCheckBox.Tag = corporationFeatures;
-            corporationCheckBox.CheckedChanged += BasicCheckBox_CheckedChanged;
-            corporationLabel.Text = string.Join(", ", advancedCorpFeaturesDescription);
+            // Set flags, hook up event and set the description
+            checkbox.Tag = features;
+            checkbox.CheckedChanged += BasicCheckBox_CheckedChanged;
+            label.Text = string.Join(", ", descriptions);
         }
 
         /// <summary>
@@ -439,6 +440,7 @@ namespace EVEMon.ApiCredentialsManagement
             SetBasicCharacterCheckState(coreFeaturesCheckBox);
             SetBasicCharacterCheckState(assetsCheckBox);
             SetBasicCharacterCheckState(contractMarketCheckBox);
+            SetBasicCharacterCheckState(industryCheckBox);
         }
 
         /// <summary>

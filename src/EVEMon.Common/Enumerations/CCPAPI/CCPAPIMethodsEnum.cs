@@ -28,7 +28,14 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The character contract & market features of ESIAPICharacterMethods
         /// </summary>
-        ContractMarketCharacterFeatures = ESIAPICharacterMethods.Contracts | ESIAPICharacterMethods.MarketOrders,
+        ContractMarketCharacterFeatures = ESIAPICharacterMethods.Contracts | ESIAPICharacterMethods.ContractBids
+            | ESIAPICharacterMethods.ContractItems | ESIAPICharacterMethods.MarketOrders,
+
+        /// <summary>
+        /// The character industry features of ESIAPICharacterMethos
+        /// </summary>
+        IndustryCharacterFeatures = ESIAPICharacterMethods.IndustryJobs | ESIAPICharacterMethods.PlanetaryColonies |
+            ESIAPICharacterMethods.PlanetaryLayout | ESIAPICharacterMethods.ResearchPoints,
 
         /// <summary>
         /// The advanced character features of ESIAPICharacterMethods.
