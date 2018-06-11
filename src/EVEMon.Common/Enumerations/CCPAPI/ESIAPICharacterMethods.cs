@@ -63,6 +63,10 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The Citadel information for a character
         /// </summary>
+        [Header("Citadel Info")]
+        [Description("The name and location of a citadel.")]
+        [ESIMethod("/v1/universe/structures/{0}/", Scope = "esi-universe.read_structures.v1")]
+        [Update(UpdatePeriod.Hours6, UpdatePeriod.Hours1)]
         CitadelInfo = (long)1 << 35,
 
         /// <summary>
