@@ -61,6 +61,11 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         CharacterSheet = 1 << 4,
 
         /// <summary>
+        /// The Citadel information for a character
+        /// </summary>
+        CitadelInfo = (long)1 << 35,
+
+        /// <summary>
         /// The clones of a character.
         /// </summary>
         [Header("Jump Clones")]
