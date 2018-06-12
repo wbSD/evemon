@@ -176,7 +176,7 @@ namespace EVEMon.ApiCredentialsManagement
                 if ((m & flags) == m)
                 {
                     features = features | m;
-                    descriptions.Add((m.HasHeader() ? m.GetHeader() : m.ToString()));
+                    descriptions.Add((m.GetESIMethodHeader() ?? m.ToString()));
                 }
             }
 
@@ -203,7 +203,7 @@ namespace EVEMon.ApiCredentialsManagement
                 if ((m & flags) == m)
                 {
                     features = features | m;
-                    descriptions.Add((m.HasHeader() ? m.GetHeader() : m.ToString()));
+                    descriptions.Add((m.GetESIMethodHeader() ?? m.ToString()));
                 }
             }
 
@@ -220,8 +220,7 @@ namespace EVEMon.ApiCredentialsManagement
         {
             // Character
             foreach (var method in m_character_methods
-                .OrderByDescending(x => x.HasHeader())
-                .ThenBy(x => x.HasHeader() ? x.GetHeader() : x.ToString()))
+                .OrderBy(x => x.GetESIMethodHeader() ?? x.ToString()))
             {
                 var cb = GenerateMethodCheckBox(method);
                 characterMethodsFlowLayoutPanel.Controls.Add(cb);
@@ -230,8 +229,7 @@ namespace EVEMon.ApiCredentialsManagement
 
             // Corporation
             foreach (var method in m_corporation_methods
-                .OrderByDescending(x => x.HasHeader())
-                .ThenBy(x => x.HasHeader() ? x.GetHeader() : x.ToString()))
+                .OrderBy(x => x.GetESIMethodHeader() ?? x.ToString()))
             {
                 var cb = GenerateMethodCheckBox(method);
                 corporationMethodsFlowLayoutPanel.Controls.Add(cb);
@@ -311,7 +309,7 @@ namespace EVEMon.ApiCredentialsManagement
                 text += Environment.NewLine;
 
                 var e = m as Enum;
-                text += e.HasHeader() ? e.GetHeader() : e.ToString();
+                text += e.GetESIMethodHeader() ?? e.ToString();
             }
 
             return text;
@@ -342,14 +340,11 @@ namespace EVEMon.ApiCredentialsManagement
         /// <returns></returns>
         private CheckBox GenerateMethodCheckBox(Enum method)
         {
-            string text = method.ToString();
-            string tooltip = string.Empty;
+            string text = method.GetESIMethodHeader() ?? method.ToString();
+            string tooltip = method.GetESIMethodDescription() ?? string.Empty;
 
-            if (method.HasHeader())
-            {
-                text = method.GetHeader();
-                tooltip = method.GetDescription() + Environment.NewLine;
-            }
+            if (!string.IsNullOrEmpty(tooltip))
+                tooltip += Environment.NewLine;
 
             tooltip += "Requires scope: " + method.GetESIMethodScope();
 
