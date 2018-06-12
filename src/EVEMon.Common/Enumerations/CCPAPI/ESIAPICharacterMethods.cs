@@ -45,9 +45,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// Tha attendees to a character's calendar event.
         /// </summary>
-        [Header("Calendar Event Attendees")]
-        [Description("The attendees and their response status to a calendar event.")]
-        [ESIMethod("/v1/characters/{0:D}/calendar/{1:D}/attendees/", Scope = "esi-calendar.read_calendar_events.v1")]
+        [ESIMethod("/v1/characters/{0:D}/calendar/{1:D}/attendees/", Scope = "esi-calendar.read_calendar_events.v1",
+            Header = "Calendar Event Attendees", Description = "The attendees and their response status to a calendar event.")]
         [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes10)]
         CalendarEventAttendees = 1 << 3,
 
@@ -55,7 +54,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// A character sheet with public information.
         /// </summary>
         [Header("Character Sheet")]
-        [Description("A character's sheet listing biography, skills, attributes and implants informations.")]
+        [Description("A character's public information, such as biography and current corporation/alliance.")]
         [ESIMethod("/v4/characters/{0:D}/")]
         [Update(UpdatePeriod.Hours1, UpdatePeriod.Hours1)]
         CharacterSheet = 1 << 4,
@@ -63,9 +62,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The Citadel information for a character
         /// </summary>
-        [Header("Citadel Info")]
-        [Description("The name and location of a citadel.")]
-        [ESIMethod("/v1/universe/structures/{0}/", Scope = "esi-universe.read_structures.v1")]
+        [ESIMethod("/v1/universe/structures/{0}/", Scope = "esi-universe.read_structures.v1", 
+            Header = "Citadel Info", Description = "The name and location of a citadel.")]
         [Update(UpdatePeriod.Hours6, UpdatePeriod.Hours1)]
         CitadelInfo = (long)1 << 35,
 
@@ -90,7 +88,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// Contact notifications for a character.
         /// </summary>
-        [ESIMethod("/v1/characters/{0:D}/notifications/contacts/", Scope = "esi-characters.read_notifications.v1")]
+        [ESIMethod("/v1/characters/{0:D}/notifications/contacts/", Scope = "esi-characters.read_notifications.v1", 
+            Header = "Contact Notifications", Description = "Contact notifications for a character.")]
         [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes10)]
         ContactNotifications = 1 << 7,
 
@@ -106,20 +105,24 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The contract items of a character contract.
         /// </summary>
-        [ESIMethod("/v1/characters/{0:D}/contracts/{1:D}/items/", Scope = "esi-contracts.read_character_contracts.v1")]
+        [ESIMethod("/v1/characters/{0:D}/contracts/{1:D}/items/", Scope = "esi-contracts.read_character_contracts.v1",
+            Header = "Contract Items", Description = "The items of a character contract.")]
         [Update(UpdatePeriod.Hours1, UpdatePeriod.Hours1)]
         ContractItems = 1 << 9,
 
         /// <summary>
         /// The bids list of a character contract.
         /// </summary>
-        [ESIMethod("/v1/characters/{0:D}/contracts/{1:D}/bids/", Scope = "esi-contracts.read_character_contracts.v1")]
+        [ESIMethod("/v1/characters/{0:D}/contracts/{1:D}/bids/", Scope = "esi-contracts.read_character_contracts.v1",
+            Header = "Contract Bids", Description = "The bids of a character contract.")]
         [Update(UpdatePeriod.Minutes10, UpdatePeriod.Minutes5)]
         ContractBids = 1 << 10,
 
         /// <summary>
         /// The employment history of a character.
         /// </summary>
+        [Header("Employment History")]
+        [Description("The employment history of a character.")]
         [ESIMethod("/v1/characters/{0:D}/corporationhistory/")]
         [Update(UpdatePeriod.Hours2, UpdatePeriod.Hours1)]
         EmploymentHistory = 1 << 11,
@@ -154,9 +157,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The jump fatigue of a character.
         /// </summary>
-        [Header("Jump Fatigue")]
-        [Description("The jump fatigue of a character.")]
-        [ESIMethod("/v1/characters/{0:D}/fatigue/", Scope = "esi-characters.read_fatigue.v1")]
+        [ESIMethod("/v1/characters/{0:D}/fatigue/", Scope = "esi-characters.read_fatigue.v1",
+            Header = "Jump Fatigue", Description = "The jump fatigue of a character.")]
         [Update(UpdatePeriod.Minutes30, UpdatePeriod.Minutes5)]
         JumpFatigue = 1 << 15,
 
@@ -190,14 +192,16 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The body text of an EVE mail message.
         /// </summary>
-        [ESIMethod("/v1/characters/{0:D}/mail/{1:D}/", Scope = "esi-mail.read_mail.v1")]
+        [ESIMethod("/v1/characters/{0:D}/mail/{1:D}/", Scope = "esi-mail.read_mail.v1",
+            Header = "EVE Mail Bodies", Description = "The contents of an EVE mail.")]
         MailBodies = 1 << 19,
 
         /// <summary>
         /// The character mailing lists. Used to convert mailing list IDs to Names.
         /// </summary>
         [Parent(MailMessages)]
-        [ESIMethod("/v1/characters/{0:D}/mail/lists/", Scope = "esi-mail.read_mail.v1")]
+        [ESIMethod("/v1/characters/{0:D}/mail/lists/", Scope = "esi-mail.read_mail.v1",
+            Header = "Mailing Lists", Description = "The mailing lists that a character is subscribed to.")]
         [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes2)]
         MailingLists = 1 << 20,
 
@@ -240,7 +244,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The planetary colony layout of a character.
         /// </summary>
-        [ESIMethod("/v3/characters/{0:D}/planets/{1:D}/", Scope = "esi-planets.manage_planets.v1")]
+        [ESIMethod("/v3/characters/{0:D}/planets/{1:D}/", Scope = "esi-planets.manage_planets.v1",
+            Header = "Planetary Layout", Description = "The layout of a planetary colony.")]
         PlanetaryLayout = 1 << 25,
 
         /// <summary>
@@ -300,9 +305,8 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// The upcoming calendar event details for a character.
         /// </summary>
-        [Header("Calendar Event Details")]
-        [Description("Details on the upcoming calendar events of a character.")]
-        [ESIMethod("/v3/characters/{0:D}/calendar/{1:D}/", Scope = "esi-calendar.read_calendar_events.v1")]
+        [ESIMethod("/v3/characters/{0:D}/calendar/{1:D}/", Scope = "esi-calendar.read_calendar_events.v1",
+            Header = "Calendar Event Details", Description = "Details on the upcoming calendar events of a character.")]
         [Update(UpdatePeriod.Minutes5, UpdatePeriod.Seconds5)]
         UpcomingCalendarEventDetails = (long)1 << 32,
 
