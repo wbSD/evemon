@@ -18,5 +18,9 @@ namespace EVEMon.Common.Attributes
         public string Path { get; }
 
         public string Scope { get; set; }
+
+        public string Header { get; set; }
+
+        public string Description { get; set; }
     }
 }

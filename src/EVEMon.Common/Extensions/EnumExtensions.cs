@@ -17,6 +17,13 @@ namespace EVEMon.Common.Extensions
         public static bool HasForcedOnStartup(this Enum item) => GetAttribute<ForcedOnStartupAttribute>(item) != null;
 
         /// <summary>
+        /// Cheks whether the given member has a description.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static bool HasDescription(this Enum item) => GetAttribute<DescriptionAttribute>(item) != null;
+
+        /// <summary>
         /// Gets the description bound to the given enumeration member.
         /// </summary>
         /// <param name="item"></param>
@@ -57,6 +64,20 @@ namespace EVEMon.Common.Extensions
         /// <param name="item"></param>
         /// <returns></returns>
         public static string GetESIMethodScope(this Enum item) => GetAttribute<ESIMethodAttribute>(item)?.Scope;
+
+        /// <summary>
+        /// Gets the ESI method header of the given member, with fallback to the header bound to the member, if any.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static string GetESIMethodHeader(this Enum item) => GetAttribute<ESIMethodAttribute>(item)?.Header ?? (item.HasHeader() ? item.GetHeader() : null);
+
+        /// <summary>
+        /// Gets the ESI method descrption of the given member, with fallback to the description bound to the member, if any.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static string GetESIMethodDescription(this Enum item) => GetAttribute<ESIMethodAttribute>(item)?.Description ?? (item.HasDescription() ? item.GetDescription() : null);
 
         /// <summary>
         /// Checks if an ESI method scope is required for the given member.
