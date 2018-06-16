@@ -61,7 +61,7 @@ namespace EVEMon.Common.Net
         /// Gets the MIME content type.
         /// </summary>
         public string ContentType => m_contentType;
-
+        
         /// <summary>
         /// Gets the compression tpye used.
         /// </summary>

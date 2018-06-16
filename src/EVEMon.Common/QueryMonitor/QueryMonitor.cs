@@ -280,6 +280,11 @@ namespace EVEMon.Common.QueryMonitor
             // Updates the stored data
             m_retryOnForceUpdateError = false;
             LastUpdate = DateTime.UtcNow;
+
+            // If the result didn't change, re-use previous result
+            if (result.ResponseCode == (int)System.Net.HttpStatusCode.NotModified)
+                result.Result = LastResult.Result;
+
             LastResult = result;
 
             // Notify subscribers

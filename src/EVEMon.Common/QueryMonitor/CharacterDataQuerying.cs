@@ -296,7 +296,7 @@ namespace EVEMon.Common.QueryMonitor
 
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
-            if (target != null)
+            if (target != null && result != null)
                 target.Import(result);
         }
 

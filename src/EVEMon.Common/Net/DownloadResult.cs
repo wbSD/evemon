@@ -29,13 +29,14 @@ namespace EVEMon.Common.Net
         /// <param name="responseCode">The server response code.</param>
         /// <param name="serverTime">The time on the server.</param>
         public DownloadResult(T result, HttpWebClientServiceException error, int responseCode,
-            DateTime serverTime, DateTime? expires = null)
+            DateTime serverTime, DateTime? expires = null, string eTag = null)
         {
             Error = error;
             Result = result;
             ResponseCode = responseCode;
             ServerTime = serverTime;
             Expires = expires;
+            ETag = eTag;
         }
 
         /// <summary>
@@ -62,6 +63,14 @@ namespace EVEMon.Common.Net
         /// <value>The time on the server, in UTC.</value>
         public DateTime ServerTime { get; }
 
+        /// <summary>
+        /// The time at which the result expires
+        /// </summary>
         public DateTime? Expires { get; }
+
+        /// <summary>
+        /// ETag value - used for If-None-Math header
+        /// </summary>
+        public string ETag { get; }
     }
 }

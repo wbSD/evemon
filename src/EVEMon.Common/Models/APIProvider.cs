@@ -141,9 +141,9 @@ namespace EVEMon.Common.Models
         /// <param name="callback">The callback to invoke once the query has been completed.</param>
         /// <param name="state">State to be passed to the callback when it is used.</param>
         public void QueryEsiAsync<T>(Enum method, ESIRequestCallback<T> callback,
-            object state = null) where T : class
+            object state = null, string eTag = null) where T : class
         {
-            QueryEsiAsync(method, callback, state, new EsiParams());
+            QueryEsiAsync(method, callback, state, new EsiParams() { ETag = eTag });
         }
 
         /// <summary>
@@ -155,9 +155,9 @@ namespace EVEMon.Common.Models
         /// <param name="callback">The callback to invoke once the query has been completed.</param>
         /// <param name="state">State to be passed to the callback when it is used.</param>
         public void QueryEsiAsync<T>(Enum method, long id, ESIRequestCallback<T> callback,
-            object state = null) where T : class
+            object state = null, string eTag = null) where T : class
         {
-            QueryEsiAsync(method, callback, state, new EsiParams() { ParamOne = id });
+            QueryEsiAsync(method, callback, state, new EsiParams() { ParamOne = id, ETag = eTag });
         }
 
         /// <summary>
@@ -170,11 +170,11 @@ namespace EVEMon.Common.Models
         /// <param name="callback">The callback to invoke once the query has been completed.</param>
         /// <param name="state">State to be passed to the callback when it is used.</param>
         public void QueryEsiAsync<T>(Enum method, long id, string data,
-            ESIRequestCallback<T> callback, object state = null) where T : class
+            ESIRequestCallback<T> callback, object state = null, string eTag = null) where T : class
         {
             QueryEsiAsync(method, callback, state, new EsiParams()
             {
-                ParamOne = id, GetData = data
+                ParamOne = id, GetData = data, ETag = eTag
             });
         }
 
@@ -187,9 +187,9 @@ namespace EVEMon.Common.Models
         /// <param name="callback">The callback to invoke once the query has been completed.</param>
         /// <param name="state">State to be passed to the callback when it is used.</param>
         public void QueryEsiAsync<T>(Enum method, string postData, ESIRequestCallback<T> callback,
-            object state = null) where T : class
+            object state = null, string eTag = null) where T : class
         {
-            QueryEsiAsync(method, callback, state, new EsiParams() { PostData = postData });
+            QueryEsiAsync(method, callback, state, new EsiParams() { PostData = postData, ETag = eTag });
         }
 
         /// <summary>
@@ -201,11 +201,11 @@ namespace EVEMon.Common.Models
         /// <param name="callback">The callback to invoke once the query has been completed.</param>
         /// <param name="state">State to be passed to the callback when it is used.</param>
         public void QueryEsiAsync<T>(Enum method, string token, long id, ESIRequestCallback<T> callback,
-            object state = null) where T : class
+            object state = null, string eTag = null) where T : class
         {
             QueryEsiAsync(method, callback, state, new EsiParams()
             {
-                Token = token, ParamOne = id
+                Token = token, ParamOne = id, ETag = eTag
             });
         }
 
@@ -219,11 +219,11 @@ namespace EVEMon.Common.Models
         /// <param name="callback">The callback to invoke once the query has been completed.</param>
         /// <param name="state">State to be passed to the callback when it is used.</param>
         public void QueryEsiAsync<T>(Enum method, string token, long character, long id,
-            ESIRequestCallback<T> callback, object state = null) where T : class
+            ESIRequestCallback<T> callback, object state = null, string eTag = null) where T : class
         {
             QueryEsiAsync(method, callback, state, new EsiParams()
             {
-                Token = token, ParamOne = character, ParamTwo = id
+                Token = token, ParamOne = character, ParamTwo = id, ETag = eTag
             });
         }
 
@@ -250,7 +250,7 @@ namespace EVEMon.Common.Models
             // Lazy download
             Uri url = GetESIUrl(method, data.ParamOne, data.ParamTwo, data.GetData);
 
-            Util.DownloadJsonAsync<T>(url, data.Token, SupportsCompressedResponse, data.PostData)
+            Util.DownloadJsonAsync<T>(url, data.Token, SupportsCompressedResponse, data.PostData, eTag: data.ETag)
                 .ContinueWith(task =>
                 {
                     var esiResult = new EsiResult<T>(task.Result);
@@ -293,6 +293,7 @@ namespace EVEMon.Common.Models
             public string GetData;
             public string PostData;
             public string Token;
+            public string ETag;
         }
 
         #endregion

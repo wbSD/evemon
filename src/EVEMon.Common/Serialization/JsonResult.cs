@@ -59,6 +59,7 @@ namespace EVEMon.Common.Serialization
             Result = wrapped.Result;
             CurrentTime = wrapped.CurrentTime;
             Expires = wrapped.Expires;
+            ETag = wrapped.ETag;
         }
 
         /// <summary>
@@ -148,6 +149,8 @@ namespace EVEMon.Common.Serialization
         public DateTime CurrentTime { get; set; }
 
         public DateTime? Expires { get; set; }
+
+        public string ETag { get; set; }
 
         #endregion
         

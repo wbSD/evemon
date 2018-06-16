@@ -55,7 +55,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Character Sheet")]
         [Description("A character's public information, such as biography and current corporation/alliance.")]
-        [ESIMethod("/v4/characters/{0:D}/")]
+        [ESIMethod("/v3/characters/{0:D}/")]
         [Update(UpdatePeriod.Hours1, UpdatePeriod.Hours1)]
         CharacterSheet = 1 << 4,
 

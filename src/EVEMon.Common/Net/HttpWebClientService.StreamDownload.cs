@@ -30,7 +30,7 @@ namespace EVEMon.Common.Net
         /// <param name="token">The ESI token, or null if none is used.</param>
         public static async Task<DownloadResult<T>> DownloadStreamAsync<T>(Uri url,
             ParseDataDelegate<T> parser, bool acceptEncoded = false,
-            HttpPostData postData = null, string token = null)
+            HttpPostData postData = null, string token = null, string eTag = null)
         {
             string urlValidationError;
             if (!IsValidURL(url, out urlValidationError))
@@ -43,7 +43,7 @@ namespace EVEMon.Common.Net
             try
             {
                 var response = await request.SendAsync(url, (postData == null) ?
-                    HttpMethod.Get : HttpMethod.Post, postData, StreamAccept).
+                    HttpMethod.Get : HttpMethod.Post, postData, StreamAccept, eTag).
                     ConfigureAwait(false);
 
                 using (response)
@@ -83,7 +83,7 @@ namespace EVEMon.Common.Net
                 // Attempt to invoke parser
                 result = parser.Invoke(Util.ZlibUncompress(stream), responseCode);
 
-            return new DownloadResult<T>(result, error, responseCode, serverTime, expires);
+            return new DownloadResult<T>(result, error, responseCode, serverTime, expires, response.Headers.ETag?.Tag);
         }
     }
 }
