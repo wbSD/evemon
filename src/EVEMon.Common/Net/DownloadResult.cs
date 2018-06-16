@@ -28,6 +28,7 @@ namespace EVEMon.Common.Net
         /// <param name="error">The error.</param>
         /// <param name="responseCode">The server response code.</param>
         /// <param name="serverTime">The time on the server.</param>
+        /// <param name="eTag">The previous result's entity tag, if applicable.</param>
         public DownloadResult(T result, HttpWebClientServiceException error, int responseCode,
             DateTime serverTime, DateTime? expires = null, string eTag = null)
         {
