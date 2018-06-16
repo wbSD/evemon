@@ -29,13 +29,14 @@ namespace EVEMon.Common.Net
         /// <param name="responseCode">The server response code.</param>
         /// <param name="serverTime">The time on the server.</param>
         public DownloadResult(T result, HttpWebClientServiceException error, int responseCode,
-            DateTime serverTime, DateTime? expires = null)
+            DateTime serverTime, DateTime? expires = null, string eTag = null)
         {
             Error = error;
             Result = result;
             ResponseCode = responseCode;
             ServerTime = serverTime;
             Expires = expires;
+            ETag = eTag;
         }
 
         /// <summary>
@@ -66,5 +67,11 @@ namespace EVEMon.Common.Net
         /// The time at which the result expires
         /// </summary>
         public DateTime? Expires { get; }
+
+        /// <summary>
+        /// Entity Tag value - used for If-None-Match header
+        /// https://developers.eveonline.com/blog/article/esi-etag-best-practices
+        /// </summary>
+        public string ETag { get; }
     }
 }
