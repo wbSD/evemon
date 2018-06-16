@@ -62,6 +62,9 @@ namespace EVEMon.Common.Net
         /// <value>The time on the server, in UTC.</value>
         public DateTime ServerTime { get; }
 
+        /// <summary>
+        /// The time at which the result expires
+        /// </summary>
         public DateTime? Expires { get; }
     }
 }
