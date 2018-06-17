@@ -5,6 +5,7 @@ using EVEMon.Common.Controls.MultiPanel;
 using EVEMon.Common.CustomEventArgs;
 using EVEMon.Common.Enumerations;
 using EVEMon.Common.Enumerations.CCPAPI;
+using EVEMon.Common.Extensions;
 using EVEMon.Common.Helpers;
 using EVEMon.Common.Models;
 using EVEMon.Common.Properties;
@@ -37,6 +38,7 @@ namespace EVEMon.ApiCredentialsManagement
             m_server = new SSOWebServer();
             m_state = DateTime.UtcNow.ToFileTime().ToString();
             m_authService = SSOAuthenticationService.GetInstance();
+            m_scopes = string.Join(" ", m_esiKey.ConvertToScopes(true));
         }
 
         /// <summary>

@@ -202,6 +202,7 @@
     <Compile Include="EveMonClient.Events.cs" />
     <Compile Include="Exceptions\APIException.cs" />
     <Compile Include="CustomEventArgs\TimeCheckSyncEventArgs.cs" />
+    <Compile Include="Extensions\ESIKeyExtensions.cs" />
     <Compile Include="Extensions\EventHandlerExtensions.cs" />
     <Compile Include="Enumerations\CharacterSaveFormat.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />

@@ -270,23 +270,8 @@ namespace EVEMon.ApiCredentialsManagement
         /// </summary>
         private void CheckCheckBoxes()
         {
-            if (m_esiKey == null)
-            {
-                // Default to just core features
-                coreFeaturesCheckBox.Checked = true;
-            }
-            else
-            {
-                // Check all character methods where flags match access mask
-                foreach (var m in m_character_methods)
-                    if (((ulong)m & m_esiKey.CharacterAccessMask) == (ulong)m)
-                        CharacterMethodChecked(m, true);
-
-                // Check all corporation methods where flags match access mask
-                foreach (var m in m_corporation_methods)
-                    if (((ulong)m & m_esiKey.CorporationAccessMask) == (ulong)m)
-                        CorporationMethodChecked(m, true);
-            }
+            foreach (string s in m_esiKey.ConvertToScopes(true))
+                ScopeChecked(s, true);
 
             // Trigger the timer tick to properly check the basic tab checkboxes
             EveMonClient_TimerTick(null, null);
