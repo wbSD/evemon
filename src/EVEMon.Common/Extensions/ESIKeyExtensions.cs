@@ -55,7 +55,7 @@ namespace EVEMon.Common.Extensions
         /// <typeparam name="T"></typeparam>
         /// <param name="mask"></param>
         /// <param name="callback"></param>
-        private static void MatchMaskToScopes<T>(this ulong mask, Action<T> callback) where T : struct, IConvertible
+        public static void MatchMaskToScopes<T>(this ulong mask, Action<T> callback) where T : struct, IConvertible
         {
             foreach (var m in Enum.GetValues(typeof(T))
                .OfType<T>()

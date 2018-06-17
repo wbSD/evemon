@@ -22,16 +22,13 @@ namespace EVEMon.ApiCredentialsManagement
         private readonly List<ESIAPICharacterMethods> m_character_methods = new List<ESIAPICharacterMethods>();
         private readonly List<ESIAPICorporationMethods> m_corporation_methods = new List<ESIAPICorporationMethods>();
 
-        private readonly Dictionary<ESIAPICharacterMethods, CheckBox> m_character_method_checkboxes = new Dictionary<ESIAPICharacterMethods, CheckBox>();
-        private readonly Dictionary<ESIAPICorporationMethods, CheckBox> m_corporation_method_checkboxes = new Dictionary<ESIAPICorporationMethods, CheckBox>();
+        private readonly Dictionary<Enum, CheckBox> m_method_checkboxes = new Dictionary<Enum, CheckBox>();
 
-        private readonly Dictionary<string, CheckBox> m_character_scope_checkboxes = new Dictionary<string, CheckBox>();
-        private readonly Dictionary<string, CheckBox> m_corporation_scope_checkboxes = new Dictionary<string, CheckBox>();
+        private readonly Dictionary<string, CheckBox> m_scope_checkboxes = new Dictionary<string, CheckBox>();
 
         private readonly HashSet<string> m_selected_scopes = new HashSet<string>();
 
-        private readonly Dictionary<string, List<ESIAPICharacterMethods>> m_scope_to_character_methods = new Dictionary<string, List<ESIAPICharacterMethods>>();
-        private readonly Dictionary<string, List<ESIAPICorporationMethods>> m_scope_to_corporation_methods = new Dictionary<string, List<ESIAPICorporationMethods>>();
+        private readonly Dictionary<string, List<Enum>> m_scope_to_methods = new Dictionary<string, List<Enum>>();
 
         private readonly ToolTip m_tooltip;
 
@@ -74,8 +71,7 @@ namespace EVEMon.ApiCredentialsManagement
             {
                 m_update_basic_checkboxes = false;
 
-                SetBasicCharacterCheckStates();
-                SetBasicCorporationCheckState();
+                SetBasicCheckStates();
             }
         }
 
@@ -102,10 +98,10 @@ namespace EVEMon.ApiCredentialsManagement
 #endif
                 var scope = m.GetESIMethodScope();
 
-                if (m_scope_to_character_methods.ContainsKey(scope))
-                    m_scope_to_character_methods[scope].Add(m);
+                if (m_scope_to_methods.ContainsKey(scope))
+                    m_scope_to_methods[scope].Add(m);
                 else
-                    m_scope_to_character_methods.Add(scope, new List<ESIAPICharacterMethods>() { m });
+                    m_scope_to_methods.Add(scope, new List<Enum>() { m });
 
                 m_character_methods.Add(m);
             }
@@ -119,10 +115,10 @@ namespace EVEMon.ApiCredentialsManagement
 #endif
                 var scope = m.GetESIMethodScope();
 
-                if (m_scope_to_corporation_methods.ContainsKey(scope))
-                    m_scope_to_corporation_methods[scope].Add(m);
+                if (m_scope_to_methods.ContainsKey(scope))
+                    m_scope_to_methods[scope].Add(m);
                 else
-                    m_scope_to_corporation_methods.Add(scope, new List<ESIAPICorporationMethods>() { m });
+                    m_scope_to_methods.Add(scope, new List<Enum>() { m });
 
                 m_corporation_methods.Add(m);
             }
@@ -150,65 +146,35 @@ namespace EVEMon.ApiCredentialsManagement
         private void ConfigureBasicCheckBoxes()
         {
             // Character
-            ConfigureBasicCharacterCheckBox(coreFeaturesCheckBox, coreFeaturesLabel, (ESIAPICharacterMethods)CCPAPIMethodsEnum.BasicCharacterFeatures);
-            ConfigureBasicCharacterCheckBox(assetsCheckBox, assetsLabel, (ESIAPICharacterMethods)CCPAPIMethodsEnum.AssetCharacterFeatures);
-            ConfigureBasicCharacterCheckBox(contractMarketCheckBox, contractMarketLabel, (ESIAPICharacterMethods)CCPAPIMethodsEnum.ContractMarketCharacterFeatures);
-            ConfigureBasicCharacterCheckBox(industryCheckBox, industryLabel, (ESIAPICharacterMethods)CCPAPIMethodsEnum.IndustryCharacterFeatures);
+            ConfigureBasicCheckBox<ESIAPICharacterMethods>(coreFeaturesCheckBox, coreFeaturesLabel, (ulong)CCPAPIMethodsEnum.BasicCharacterFeatures);
+            ConfigureBasicCheckBox<ESIAPICharacterMethods>(assetsCheckBox, assetsLabel, (ulong)CCPAPIMethodsEnum.AssetCharacterFeatures);
+            ConfigureBasicCheckBox<ESIAPICharacterMethods>(contractMarketCheckBox, contractMarketLabel, (ulong)CCPAPIMethodsEnum.ContractMarketCharacterFeatures);
+            ConfigureBasicCheckBox<ESIAPICharacterMethods>(industryCheckBox, industryLabel, (ulong)CCPAPIMethodsEnum.IndustryCharacterFeatures);
 
             // Corporation
-            ConfigureBasicCorporationCheckBox(corporationCheckBox, corporationLabel, (ESIAPICorporationMethods)CCPAPIMethodsEnum.AdvancedCorporationFeatures);
+            ConfigureBasicCheckBox<ESIAPICorporationMethods>(corporationCheckBox, corporationLabel, (ulong)CCPAPIMethodsEnum.AdvancedCorporationFeatures);
         }
 
         /// <summary>
-        /// Configure a basic tab character feature checkbox
+        /// Configure a basic tab feature checkbox
         /// </summary>
         /// <param name="checkbox">The checkbox to configure</param>
         /// <param name="label">The label where the description will go</param>
-        /// <param name="flags">The character methods that the checkbox should apply to</param>
-        private void ConfigureBasicCharacterCheckBox(CheckBox checkbox, Label label, ESIAPICharacterMethods flags)
+        /// <param name="flags">The methods that the checkbox should apply to, converted to <see cref="ulong"/></param>
+        private void ConfigureBasicCheckBox<T>(CheckBox checkbox, Label label, ulong flags) where T : struct, IConvertible
         {
-            var features = ESIAPICharacterMethods.None;
+            var features = 0UL;
             var descriptions = new List<string>();
 
-            // Get flags and description for character methods that require scopes
-            foreach (var m in m_character_methods)
+            // Get flags and description for methods that require scopes
+            flags.MatchMaskToScopes<T>((m) =>
             {
-                if ((m & flags) == m)
-                {
-                    features = features | m;
-                    descriptions.Add((m.GetESIMethodHeader() ?? m.ToString()));
-                }
-            }
+                features = features | Convert.ToUInt64(m);
+                descriptions.Add(((m as Enum).GetESIMethodHeader() ?? m.ToString()));
+            });
 
             // Set flags, hook up event and set the description
-            checkbox.Tag = features;
-            checkbox.CheckedChanged += BasicCheckBox_CheckedChanged;
-            label.Text = string.Join(", ", descriptions);
-        }
-
-        /// <summary>
-        /// Configure a basic tab corporation feature checkbox
-        /// </summary>
-        /// <param name="checkbox">The checkbox to configure</param>
-        /// <param name="label">The label where the description will go</param>
-        /// <param name="flags">The character methods that the checkbox should apply to</param>
-        private void ConfigureBasicCorporationCheckBox(CheckBox checkbox, Label label, ESIAPICorporationMethods flags)
-        {
-            var features = ESIAPICorporationMethods.None;
-            var descriptions = new List<string>();
-
-            // Get flags and description for corporation methods that require scopes
-            foreach (var m in m_corporation_methods)
-            {
-                if ((m & flags) == m)
-                {
-                    features = features | m;
-                    descriptions.Add((m.GetESIMethodHeader() ?? m.ToString()));
-                }
-            }
-
-            // Set flags, hook up event and set the description
-            checkbox.Tag = features;
+            checkbox.Tag = Enum.ToObject(typeof(T), features);
             checkbox.CheckedChanged += BasicCheckBox_CheckedChanged;
             label.Text = string.Join(", ", descriptions);
         }
@@ -224,7 +190,7 @@ namespace EVEMon.ApiCredentialsManagement
             {
                 var cb = GenerateMethodCheckBox(method);
                 characterMethodsFlowLayoutPanel.Controls.Add(cb);
-                m_character_method_checkboxes.Add(method, cb);
+                m_method_checkboxes.Add(method, cb);
             }
 
             // Corporation
@@ -233,7 +199,7 @@ namespace EVEMon.ApiCredentialsManagement
             {
                 var cb = GenerateMethodCheckBox(method);
                 corporationMethodsFlowLayoutPanel.Controls.Add(cb);
-                m_corporation_method_checkboxes.Add(method, cb);
+                m_method_checkboxes.Add(method, cb);
             }
         }
 
@@ -243,14 +209,14 @@ namespace EVEMon.ApiCredentialsManagement
         private void CreateScopeCheckBoxes()
         {
             // Character
-            foreach(var scope in m_character_methods
+            foreach (var scope in m_character_methods
                 .Select(x => x.GetESIMethodScope())
                 .Distinct()
                 .OrderBy(x => x))
             {
                 var cb = GenerateScopeCheckBox(scope);
                 characterScopesFlowLayoutPanel.Controls.Add(cb);
-                m_character_scope_checkboxes.Add(scope, cb);
+                m_scope_checkboxes.Add(scope, cb);
             }
 
             // Corporation
@@ -261,7 +227,7 @@ namespace EVEMon.ApiCredentialsManagement
             {
                 var cb = GenerateScopeCheckBox(scope);
                 corporationScopesFlowLayoutPanel.Controls.Add(cb);
-                m_corporation_scope_checkboxes.Add(scope, cb);
+                m_scope_checkboxes.Add(scope, cb);
             }
         }
 
@@ -283,13 +249,13 @@ namespace EVEMon.ApiCredentialsManagement
         /// <typeparam name="T"></typeparam>
         /// <param name="methods"></param>
         /// <returns></returns>
-        private string MethodsToString<T>(List<T> methods) where T : struct, IConvertible
+        private string MethodsToString<T>(IEnumerable<T> methods) //where T : struct, IConvertible
         {
             if (!typeof(T).IsEnum) throw new ArgumentException("T must be an enumerated type");
 
             string text = string.Empty;
 
-            foreach(var m in methods)
+            foreach (var m in methods)
             {
                 text += Environment.NewLine;
 
@@ -309,11 +275,16 @@ namespace EVEMon.ApiCredentialsManagement
         {
             string tooltip = string.Empty;
 
-            if (m_scope_to_character_methods.ContainsKey(scope))
-                tooltip += "Character Methods:" + MethodsToString(m_scope_to_character_methods[scope]);
+            if (m_scope_to_methods.ContainsKey(scope))
+            {
+                var charactermethods = m_scope_to_methods[scope].OfType<ESIAPICharacterMethods>();
+                if (charactermethods.Any())
+                    tooltip += "Character Methods:" + MethodsToString(charactermethods);
 
-            if (m_scope_to_corporation_methods.ContainsKey(scope))
-                tooltip += "Corporation Methods:" + MethodsToString(m_scope_to_corporation_methods[scope]);
+                var corporationmethods = m_scope_to_methods[scope].OfType<ESIAPICorporationMethods>();
+                if (corporationmethods.Any())
+                    tooltip += "Corporation Methods:" + MethodsToString(corporationmethods);
+            }
 
             return GenerateCheckBox(scope, scope, tooltip);
         }
@@ -371,106 +342,70 @@ namespace EVEMon.ApiCredentialsManagement
         {
             if (sender is CheckBox cb)
                 if (cb.Tag is ESIAPICharacterMethods method)
-                    CheckCharacterMethods(method, cb.CheckState);
+                    CheckMethods<ESIAPICharacterMethods>((ulong)method, cb.CheckState);
                 else if (cb.Tag is ESIAPICorporationMethods corpmethod)
-                    CheckCorporationMethods(corpmethod, cb.CheckState);
+                    CheckMethods<ESIAPICorporationMethods>((ulong)corpmethod, cb.CheckState);
         }
 
         /// <summary>
-        /// Check all character methods that match flags
+        /// Check all methods that match flags
         /// </summary>
         /// <param name="flags"></param>
         /// <param name="checkedState"></param>
-        private void CheckCharacterMethods(ESIAPICharacterMethods flags, CheckState checkedState)
+        private void CheckMethods<T>(ulong flags, CheckState checkedState) where T : struct, IConvertible
         {
             bool isChecked = checkedState == CheckState.Checked;
 
             if (isChecked || checkedState == CheckState.Unchecked)
-                foreach (var m in m_character_methods)
+            {
+                // Check method checkboxes where flag matches and the scope isn't already selected
+                flags.MatchMaskToScopes<T>((m) =>
                 {
-                    // Check character method checkboxes where flag matches and the scope isn't already selected
-                    if ((m & flags) == m && m_selected_scopes.Contains(m.GetESIMethodScope()) != isChecked)
-                        CharacterMethodChecked(m, isChecked);
-                }
+                    if (m_selected_scopes.Contains((m as Enum).GetESIMethodScope()) != isChecked)
+                        MethodChecked((m as Enum), isChecked);
+                });
+            }
         }
 
         /// <summary>
-        /// Check all corporation methods that match flags
+        /// Set the correct ThreeState for the feature checkboxes in the basic tab
         /// </summary>
-        /// <param name="flags"></param>
-        /// <param name="checkedState"></param>
-        private void CheckCorporationMethods(ESIAPICorporationMethods flags, CheckState checkedState)
+        private void SetBasicCheckStates()
         {
-            bool isChecked = checkedState == CheckState.Checked;
+            // Character
+            SetCheckState<ESIAPICharacterMethods>(coreFeaturesCheckBox);
+            SetCheckState<ESIAPICharacterMethods>(assetsCheckBox);
+            SetCheckState<ESIAPICharacterMethods>(contractMarketCheckBox);
+            SetCheckState<ESIAPICharacterMethods>(industryCheckBox);
 
-            if (isChecked || checkedState == CheckState.Unchecked)
-                foreach (var m in m_corporation_methods)
-                {
-                    // Check corporation method checkboxes where flag matches and the scope isn't already selected
-                    if ((m & flags) == m && m_selected_scopes.Contains(m.GetESIMethodScope()) != isChecked)
-                        CorporationMethodChecked(m, isChecked);
-                }
+            // Corporation
+            SetCheckState<ESIAPICorporationMethods>(corporationCheckBox);
         }
 
         /// <summary>
-        /// Set the correct ThreeState for the character feature checkboxes in the basic tab
-        /// </summary>
-        private void SetBasicCharacterCheckStates()
-        {
-            SetBasicCharacterCheckState(coreFeaturesCheckBox);
-            SetBasicCharacterCheckState(assetsCheckBox);
-            SetBasicCharacterCheckState(contractMarketCheckBox);
-            SetBasicCharacterCheckState(industryCheckBox);
-        }
-
-        /// <summary>
-        /// Set ThreeState for a character feature checkbox
+        /// Set ThreeState for a feature checkbox
         /// </summary>
         /// <param name="cb"></param>
-        private void SetBasicCharacterCheckState(CheckBox cb)
+        private void SetCheckState<T>(CheckBox cb) where T : struct, IConvertible
         {
             // Figure out what flags are currently set
-            ESIAPICharacterMethods selected = ESIAPICharacterMethods.None;
-            foreach(var m in m_character_methods)
-            {
-                if (m_selected_scopes.Contains(m.GetESIMethodScope()))
-                    selected = selected | m;
-            }
+            ulong selected = 0UL;
 
-            var compare = (ESIAPICharacterMethods)cb.Tag;
+            ulong.MaxValue.MatchMaskToScopes<T>((m) =>
+            {
+                if (m_selected_scopes.Contains((m as Enum).GetESIMethodScope()))
+                    selected = selected | Convert.ToUInt64(m);
+            });
+
+            var compare = (ulong)cb.Tag;
 
             // Set checked state based on full, none or partial match
             if ((selected & compare) == compare)
                 cb.CheckState = CheckState.Checked;
-            else if ((selected & compare) == ESIAPICharacterMethods.None)
+            else if ((selected & compare) == 0UL)
                 cb.CheckState = CheckState.Unchecked;
             else
                 cb.CheckState = CheckState.Indeterminate;
-        }
-
-        /// <summary>
-        /// Set the CheckedState of the the corporation features checkbox
-        /// </summary>
-        /// <param name="cb"></param>
-        private void SetBasicCorporationCheckState()
-        {
-            // Figure out what flags are currently set         
-            ESIAPICorporationMethods selected = ESIAPICorporationMethods.None;
-            foreach (var m in m_corporation_methods)
-            {
-                if (m_selected_scopes.Contains(m.GetESIMethodScope()))
-                    selected = selected | m;
-            }
-
-            var compare = (ESIAPICorporationMethods)corporationCheckBox.Tag;
-
-            // Set checked state based on full, none or partial match
-            if ((selected & compare) == compare)
-                corporationCheckBox.CheckState = CheckState.Checked;
-            else if ((selected & compare) == ESIAPICorporationMethods.None)
-                corporationCheckBox.CheckState = CheckState.Unchecked;
-            else
-                corporationCheckBox.CheckState = CheckState.Indeterminate;
         }
 
         /// <summary>
@@ -484,10 +419,8 @@ namespace EVEMon.ApiCredentialsManagement
             {
                 if (cb.Tag is string scope)
                     ScopeChecked(scope, cb.Checked);
-                else if (cb.Tag is ESIAPICharacterMethods method_char)
-                    CharacterMethodChecked(method_char, cb.Checked);
-                else if (cb.Tag is ESIAPICorporationMethods method_corp)
-                    CorporationMethodChecked(method_corp, cb.Checked);
+                else if (cb.Tag is Enum m)
+                    MethodChecked(m, cb.Checked);
             }
         }
 
@@ -500,48 +433,25 @@ namespace EVEMon.ApiCredentialsManagement
         {
             AddOrRemoveScope(scope, isChecked);
 
-            // Update all related character method checkboxes
-            if (m_scope_to_character_methods.ContainsKey(scope))
-                foreach (var method in m_scope_to_character_methods[scope])
-                    m_character_method_checkboxes[method].Checked = isChecked;
-
-            // Update all related corporation method checkboxes
-            if (m_scope_to_corporation_methods.ContainsKey(scope))
-                foreach (var method in m_scope_to_corporation_methods[scope])
-                    m_corporation_method_checkboxes[method].Checked = isChecked;
+            // Update all related method checkboxes
+            if (m_scope_to_methods.ContainsKey(scope))
+                foreach (var method in m_scope_to_methods[scope])
+                    m_method_checkboxes[method].Checked = isChecked;
         }
 
         /// <summary>
-        /// Propagate changes to Character Method checkboxes to the other checkboxes
+        /// Propagate changes to Method checkboxes to the other checkboxes
         /// </summary>
         /// <param name="method"></param>
         /// <param name="isChecked"></param>
-        private void CharacterMethodChecked(ESIAPICharacterMethods method, bool isChecked)
+        private void MethodChecked(Enum method, bool isChecked)
         {
             var methodscope = method.GetESIMethodScope();
 
             AddOrRemoveScope(methodscope, isChecked);
 
             // Update the related scope checkbox
-            m_character_scope_checkboxes[methodscope].Checked = isChecked;
-
-            // Update basic tab checkboxes
-            m_update_basic_checkboxes = true;
-        }
-
-        /// <summary>
-        /// Propagate changes to Corporation Method checkboxes to the other checkboxes
-        /// </summary>
-        /// <param name="method"></param>
-        /// <param name="isChecked"></param>
-        private void CorporationMethodChecked(ESIAPICorporationMethods method, bool isChecked)
-        {
-            var methodscope = method.GetESIMethodScope();
-
-            AddOrRemoveScope(methodscope, isChecked);;
-
-            // Update the related scope checkbox
-            m_corporation_scope_checkboxes[methodscope].Checked = isChecked;
+            m_scope_checkboxes[methodscope].Checked = isChecked;
 
             // Update basic tab checkboxes
             m_update_basic_checkboxes = true;
@@ -552,16 +462,12 @@ namespace EVEMon.ApiCredentialsManagement
         /// </summary>
         /// <param name="scope"></param>
         /// <param name="add"></param>
-        private bool AddOrRemoveScope(string scope, bool add)
+        private void AddOrRemoveScope(string scope, bool add)
         {
-            bool selected = m_selected_scopes.Contains(scope);
-
             if (add)
                 m_selected_scopes.Add(scope);
             else
                 m_selected_scopes.Remove(scope);
-
-            return add != selected;
         }
         #endregion
 
