@@ -32,12 +32,10 @@ namespace EVEMon.ApiCredentialsManagement
 
         private readonly ToolTip m_tooltip;
 
-        private readonly ESIKey m_esiKey;
-
         private bool m_update_basic_checkboxes = false;
         #endregion
 
-        public delegate void ESIScopesDelegate(string scopes);
+        public delegate void ESIScopesDelegate(HashSet<string> scopes);
 
         public event ESIScopesDelegate ESIScopesEvent;
 
@@ -79,9 +77,11 @@ namespace EVEMon.ApiCredentialsManagement
         /// Constructor
         /// </summary>
         /// <param name="key">ESI Key to copy scope setup from</param>
-        public ESIScopesWindow(ESIKey key) : this()
+        public ESIScopesWindow(HashSet<string> scopes) : this()
         {
-            m_esiKey = key;
+            if (scopes != null)
+                foreach (var s in scopes)
+                    m_selected_scopes.Add(s);
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace EVEMon.ApiCredentialsManagement
         /// </summary>
         private void CheckCheckBoxes()
         {
-            foreach (string s in m_esiKey.ConvertToScopes(true))
+            foreach (string s in m_selected_scopes)
                 ScopeChecked(s, true);
 
             // Trigger the timer tick to properly check the basic tab checkboxes
@@ -478,15 +478,13 @@ namespace EVEMon.ApiCredentialsManagement
         /// <param name="e"></param>
         private void saveButton_Click(object sender, EventArgs e)
         {
-            var scopes = string.Join(" ", m_selected_scopes);
-
-            if (string.IsNullOrEmpty(scopes))
+            if (m_selected_scopes.Count == 0)
             {
                 MessageBox.Show("Please check at least one checkbox", "No scopes selected", MessageBoxButtons.OK);
             }
             else
             {
-                ESIScopesEvent?.Invoke(scopes);
+                ESIScopesEvent?.Invoke(m_selected_scopes);
                 Close();
             }
         }

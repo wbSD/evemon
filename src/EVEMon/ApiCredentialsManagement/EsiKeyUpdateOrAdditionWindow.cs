@@ -13,6 +13,7 @@ using EVEMon.Common.Serialization;
 using EVEMon.Common.Service;
 using EVEMon.SettingsUI;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,7 +28,7 @@ namespace EVEMon.ApiCredentialsManagement
         private ESIKeyCreationEventArgs m_creationArgs;
         private readonly SSOWebServer m_server;
         private readonly string m_state;
-        private string m_scopes = null;
+        private HashSet<string> m_scopes;
 
         /// <summary>
         /// Constructor for new ESI credential.
@@ -38,7 +39,6 @@ namespace EVEMon.ApiCredentialsManagement
             m_server = new SSOWebServer();
             m_state = DateTime.UtcNow.ToFileTime().ToString();
             m_authService = SSOAuthenticationService.GetInstance();
-            m_scopes = string.Join(" ", m_esiKey.ConvertToScopes(true));
         }
 
         /// <summary>
@@ -131,6 +131,8 @@ namespace EVEMon.ApiCredentialsManagement
             MultiPanel.SelectedPage = CredentialsPage;
             MultiPanel.SelectionChange += MultiPanel_SelectionChange;
             UpdateButtons(CredentialsPage);
+
+            m_scopes = m_esiKey.ConvertToScopes(true);
         }
 
         /// <summary>
@@ -373,7 +375,7 @@ namespace EVEMon.ApiCredentialsManagement
         /// data.</param>
         private void ButtonESILogin_Click(object sender, EventArgs e)
         {
-            m_authService?.SpawnBrowserForLogin(m_state, SSOWebServer.PORT, m_scopes);
+            m_authService?.SpawnBrowserForLogin(m_state, SSOWebServer.PORT, string.Join(" ", m_scopes));
         }
 
         /// <summary>
@@ -383,7 +385,7 @@ namespace EVEMon.ApiCredentialsManagement
         /// <param name="e"></param>
         private void scopesButton_Click(object sender, EventArgs e)
         {
-            using(var window = new ESIScopesWindow(m_esiKey))
+            using (var window = new ESIScopesWindow(m_scopes))
             {
                 window.ESIScopesEvent += Window_ESIScopesEvent;
                 window.ShowDialog();
@@ -394,7 +396,7 @@ namespace EVEMon.ApiCredentialsManagement
         /// Event handler for ESI scopes window event
         /// </summary>
         /// <param name="scopes"></param>
-        private void Window_ESIScopesEvent(string scopes)
+        private void Window_ESIScopesEvent(HashSet<string> scopes)
         {
             m_scopes = scopes;
         }
