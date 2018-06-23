@@ -16,7 +16,7 @@ namespace EVEMon.Common.Serialization.Eve
         /// </summary>
         public EsiResult(int responseCode, T result = default(T)) : base(responseCode, result)
         {
-            CachedUntil = Expires ?? CurrentTime;
+            CachedUntil = CurrentTime;
         }
         
         /// <summary>
@@ -25,7 +25,7 @@ namespace EVEMon.Common.Serialization.Eve
         /// <param name="exception">The exception.</param>
         public EsiResult(HttpWebClientServiceException exception) : base(exception)
         {
-            CachedUntil = Expires ?? CurrentTime;
+            CachedUntil = CurrentTime;
         }
         
         /// <summary>
@@ -34,7 +34,7 @@ namespace EVEMon.Common.Serialization.Eve
         /// <param name="wrapped">The result to wrap.</param>
         public EsiResult(JsonResult<T> wrapped) : base(wrapped)
         {
-            CachedUntil = wrapped.Expires ?? wrapped.CurrentTime;
+            CachedUntil = wrapped.CurrentTime;
         }
 
         #endregion

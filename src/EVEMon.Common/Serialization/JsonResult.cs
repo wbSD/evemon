@@ -58,7 +58,6 @@ namespace EVEMon.Common.Serialization
             m_responseCode = wrapped.ResponseCode;
             Result = wrapped.Result;
             CurrentTime = wrapped.CurrentTime;
-            Expires = wrapped.Expires;
         }
 
         /// <summary>
@@ -146,8 +145,6 @@ namespace EVEMon.Common.Serialization
         public T Result { get; set; }
 
         public DateTime CurrentTime { get; set; }
-
-        public DateTime? Expires { get; set; }
 
         #endregion
         

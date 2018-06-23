@@ -495,8 +495,7 @@ namespace EVEMon.Common
                     result = new JsonResult<T>(new InvalidOperationException("null JSON response"));
                 else
                     result = new JsonResult<T>(asyncResult.ResponseCode, data) {
-                        CurrentTime = asyncResult.ServerTime,
-                        Expires = asyncResult.Expires
+                        CurrentTime = asyncResult.ServerTime
                     };
             }
             catch (InvalidOperationException e)

@@ -73,7 +73,6 @@ namespace EVEMon.Common.Net
             HttpWebClientServiceException error = null;
             int responseCode = (int)response.StatusCode;
             DateTime serverTime = response.Headers.ServerTimeUTC();
-            DateTime? expires = response.Content?.Headers?.ExpiresTimeUTC();
 
             if (stream == null)
                 // No stream (can this happen)?
@@ -83,7 +82,7 @@ namespace EVEMon.Common.Net
                 // Attempt to invoke parser
                 result = parser.Invoke(Util.ZlibUncompress(stream), responseCode);
 
-            return new DownloadResult<T>(result, error, responseCode, serverTime, expires);
+            return new DownloadResult<T>(result, error, responseCode, serverTime);
         }
     }
 }
