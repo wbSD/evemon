@@ -10,6 +10,7 @@ using EVEMon.Common.Models;
 using EVEMon.Common.Service;
 using EVEMon.Common.Serialization.Esi;
 using EVEMon.Common.Serialization.Eve;
+using EVEMon.Common.Net;
 
 namespace EVEMon.Common.QueryMonitor
 {
@@ -27,7 +28,6 @@ namespace EVEMon.Common.QueryMonitor
         private readonly List<IQueryMonitorEx> m_basicFeaturesMonitors;
         private readonly CCPCharacter m_ccpCharacter;
         private bool m_characterSheetUpdating = false;
-
         #endregion
 
 
@@ -42,7 +42,6 @@ namespace EVEMon.Common.QueryMonitor
             var notifiers = EveMonClient.Notifications;
             m_ccpCharacter = ccpCharacter;
             m_characterQueryMonitors = new List<IQueryMonitorEx>();
-
             // Add the monitors in an order as they will appear in the throbber menu
             m_charSheetMonitor = new CharacterQueryMonitor<EsiAPICharacterSheet>(ccpCharacter,
                 ESIAPICharacterMethods.CharacterSheet, OnCharacterSheetUpdated,
