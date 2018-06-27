@@ -28,6 +28,10 @@ namespace EVEMon.Common.QueryMonitor
         private readonly List<IQueryMonitorEx> m_basicFeaturesMonitors;
         private readonly CCPCharacter m_ccpCharacter;
         private bool m_characterSheetUpdating = false;
+
+        // Result from the character skill queue to handle a pathological case where skill
+        // queues were not-modified but need to be re-imported due to a skills list change
+        private EsiAPISkillQueue m_lastQueue;
         #endregion
 
 
@@ -42,6 +46,8 @@ namespace EVEMon.Common.QueryMonitor
             var notifiers = EveMonClient.Notifications;
             m_ccpCharacter = ccpCharacter;
             m_characterQueryMonitors = new List<IQueryMonitorEx>();
+            m_lastQueue = null;
+
             // Add the monitors in an order as they will appear in the throbber menu
             m_charSheetMonitor = new CharacterQueryMonitor<EsiAPICharacterSheet>(ccpCharacter,
                 ESIAPICharacterMethods.CharacterSheet, OnCharacterSheetUpdated,
@@ -366,7 +372,7 @@ namespace EVEMon.Common.QueryMonitor
             var target = m_ccpCharacter;
             // Character may have been deleted since we queried
             if (target != null)
-                target.Import(result, m_charSkillQueueMonitor?.LastResult?.Result);
+                target.Import(result, m_lastQueue);
         }
 
         /// <summary>
@@ -395,6 +401,7 @@ namespace EVEMon.Common.QueryMonitor
             // Character may have been deleted since we queried
             if (target != null)
             {
+                m_lastQueue = result;
                 target.SkillQueue.Import(result.ToXMLItem().Queue);
                 // Check the character has less than a day of training in skill queue
                 if (target.IsTraining && target.SkillQueue.LessThanWarningThreshold)
@@ -402,6 +409,8 @@ namespace EVEMon.Common.QueryMonitor
                 else
                     EveMonClient.Notifications.InvalidateSkillQueueLessThanADay(target);
             }
+            else
+                m_lastQueue = null;
         }
 
         /// <summary>
@@ -647,7 +656,7 @@ namespace EVEMon.Common.QueryMonitor
             if (target != null)
             {
                 // TODO Corp and alliance contacts
-                target.Contacts.Import(result.ToXMLItem().AllContacts);
+                target.Contacts.Import(result);
                 EveMonClient.OnCharacterContactsUpdated(target);
             }
         }
