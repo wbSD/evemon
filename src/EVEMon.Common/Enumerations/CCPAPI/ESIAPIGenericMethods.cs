@@ -87,7 +87,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// List of solar systems taking part in Factional Warfare and their occupancy.
         /// </summary>
-        [ESIMethod("/v1/fw/systems/")]
+        [ESIMethod("/v2/fw/systems/")]
         FactionalWarfareSystems,
 
         /// <summary>

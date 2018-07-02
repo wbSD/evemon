@@ -81,7 +81,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// </summary>
         [Header("Contacts")]
         [Description("The contacts of a character.")]
-        [ESIMethod("/v1/characters/{0:D}/contacts/", Scope = "esi-characters.read_contacts.v1")]
+        [ESIMethod("/v2/characters/{0:D}/contacts/", Scope = "esi-characters.read_contacts.v1")]
         [Update(UpdatePeriod.Minutes15, UpdatePeriod.Minutes5)]
         ContactList = 1 << 6,
 

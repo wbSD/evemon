@@ -57,7 +57,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// A list of corporation contacts.
         /// </summary>
-        [ESIMethod("/v1/corporations/{0:D}/contacts/", Scope = "esi-corporations.read_contacts.v1")]
+        [ESIMethod("/v2/corporations/{0:D}/contacts/", Scope = "esi-corporations.read_contacts.v1")]
         CorporationContactList = 1 << 6,
 
         /// <summary>
