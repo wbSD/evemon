@@ -37,7 +37,7 @@ namespace EVEMon.Common.Models
             FlagID = (short)flagID;
             m_character = character;
             m_flag = EveFlag.GetFlagText(flagID);
-            TypeOfBlueprint = GetTypeOfBlueprint(src.RawQuantity);
+            TypeOfBlueprint = GetTypeOfBlueprint(src.IsBPC);
             Container = string.Empty;
             Volume = GetVolume();
             TotalVolume = Quantity * Volume;
@@ -174,11 +174,11 @@ namespace EVEMon.Common.Models
         /// <summary>
         /// Gets the type of the blueprint.
         /// </summary>
-        /// <param name="rawQuantity">The raw quantity.</param>
+        /// <param name="isBPC">Whether ESI reported it as a BPC.</param>
         /// <returns></returns>
-        private string GetTypeOfBlueprint(int rawQuantity) => (Item != null &&
+        private string GetTypeOfBlueprint(bool isBPC) => (Item != null &&
             StaticBlueprints.GetBlueprintByID(Item.ID) != null && !Item.MarketGroup.BelongsIn(
-            DBConstants.AncientRelicsMarketGroupID)) ? (rawQuantity == -2 ?
+            DBConstants.AncientRelicsMarketGroupID)) ? (isBPC ?
             BlueprintType.Copy.ToString() : BlueprintType.Original.ToString()) : string.Empty;
 
         /// <summary>
@@ -194,12 +194,11 @@ namespace EVEMon.Common.Models
         /// <returns></returns>
         public void UpdateLocation()
         {
-            string location = m_locationID.ToString(CultureConstants.InvariantCulture);
             // If location not already determined
-            if (m_locationID != 0L && (m_solarSystem == null || m_fullLocation.
-                IsEmptyOrUnknown()))
+            if (m_locationID != 0L && (m_solarSystem == null || m_solarSystem.ID == 0 ||
+                m_fullLocation.IsEmptyOrUnknown()))
             {
-                Station station = EveIDToStation.GetIDToStation(m_locationID, m_character);
+                var station = EveIDToStation.GetIDToStation(m_locationID, m_character);
                 if (station == null)
                 {
                     SolarSystem sys;
@@ -213,7 +212,7 @@ namespace EVEMon.Common.Models
                     else
                     {
                         // In an inaccessible citadel, or one that is not yet loaded
-                        m_solarSystem = null;
+                        m_solarSystem = new SolarSystem();
                         m_fullLocation = EveMonConstants.UnknownText;
                     }
                 }
@@ -223,7 +222,8 @@ namespace EVEMon.Common.Models
                     m_solarSystem = station.SolarSystem;
                     m_fullLocation = station.FullLocation;
                 }
-                Location = (station == null ? (m_solarSystem == null ? location :
+                string locationStr = m_locationID.ToString(CultureConstants.InvariantCulture);
+                Location = (station == null ? (m_solarSystem == null ? locationStr :
                     m_solarSystem.Name) : station.Name);
             }
         }
