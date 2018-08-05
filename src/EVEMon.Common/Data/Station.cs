@@ -48,10 +48,16 @@ namespace EVEMon.Common.Data
             FullLocation = GetFullLocation(SolarSystem, src.StationName);
         }
 
-        private Station(SerializableOutpost src, SolarSystem owner)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Station"/> class.
+        /// </summary>
+        /// <param name="src">The source.</param>
+        /// <param name="fallback">Solar system to fall back to,
+        /// if the source solar system cannot be found</param>
+        private Station(SerializableOutpost src, SolarSystem fallback)
             : this(src)
         {
-            SolarSystem = SolarSystem ?? owner;
+            SolarSystem = SolarSystem ?? fallback;
         }
 
         /// <summary>
