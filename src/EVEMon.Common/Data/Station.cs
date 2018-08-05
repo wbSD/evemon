@@ -26,7 +26,7 @@ namespace EVEMon.Common.Data
                 StationID = id,
                 StationName = "Inaccessible Structure",
                 StationTypeID = 35832 // Astrahus
-            });
+            }, new SolarSystem());
         }
 
         #region Constructor
@@ -46,6 +46,12 @@ namespace EVEMon.Common.Data
             CorporationName = src.CorporationName;
             SolarSystem = StaticGeography.GetSolarSystemByID(src.SolarSystemID);
             FullLocation = GetFullLocation(SolarSystem, src.StationName);
+        }
+
+        private Station(SerializableOutpost src, SolarSystem owner)
+            : this(src)
+        {
+            SolarSystem = SolarSystem ?? owner;
         }
 
         /// <summary>
