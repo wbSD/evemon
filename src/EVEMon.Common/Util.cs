@@ -15,7 +15,6 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Net.NetworkInformation;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -496,7 +495,7 @@ namespace EVEMon.Common
             {
                 int code;
                 // Error code was converted to a string to match APIException
-                if (!int.TryParse(e.ErrorCode, out code))
+                if (!e.ErrorCode.TryParseInv(out code))
                     code = 0;
                 result = new JsonResult<T>(new ResponseParams(code), e.Message);
                 ExceptionHandler.LogException(e, true);
@@ -604,7 +603,7 @@ namespace EVEMon.Common
 
             // Returns the revision number (first group is the whole match, the second one the capture)
             int revision;
-            return Int32.TryParse(match.Groups[1].Value, out revision) ? revision : default(int);
+            return match.Groups[1].Value.TryParseInv(out revision) ? revision : default(int);
         }
 
         /// <summary>
@@ -1137,6 +1136,32 @@ namespace EVEMon.Common
                 yStream.Load(sr);
                 return yStream.Documents.First().RootNode;
             }
+        }
+
+        /// <summary>
+        /// Converts the binary data to URL-safe Base 64 encoding.
+        /// </summary>
+        /// <param name="data">The byte data to convert.</param>
+        /// <returns>The URL safe encoded version.</returns>
+        public static string URLSafeBase64(byte[] data)
+        {
+            return Convert.ToBase64String(data).Replace('+', '-').Replace('/', '_').
+                Replace('=', '.');
+        }
+
+        /// <summary>
+        /// Computes the Base-64 URL safe SHA-256 hash of the data.
+        /// </summary>
+        /// <param name="data">The encoded data to hash.</param>
+        /// <returns>The URL safe encoded SHA-256 hash of that data.</returns>
+        public static string SHA256Base64(byte[] data)
+        {
+            string hash;
+            using (var sha = new SHA256Managed())
+            {
+                hash = URLSafeBase64(sha.ComputeHash(data));
+            }
+            return hash;
         }
     }
 }

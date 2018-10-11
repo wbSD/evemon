@@ -56,6 +56,7 @@
             this.DockedInfoLabel = new System.Windows.Forms.Label();
             this.CharacterPortrait = new EVEMon.Common.Controls.CharacterPortrait();
             this.SkillSummaryPanel = new System.Windows.Forms.Panel();
+            this.CustomLabelLink = new System.Windows.Forms.LinkLabel();
             this.RemapsCloneJumpSummaryLabel = new System.Windows.Forms.Label();
             this.tlpAttributes = new System.Windows.Forms.TableLayoutPanel();
             this.lblMEMAttribute = new System.Windows.Forms.Label();
@@ -69,6 +70,8 @@
             this.AttributeWillpowerLabel = new System.Windows.Forms.Label();
             this.lblINTAttribute = new System.Windows.Forms.Label();
             this.SkillSummaryLabel = new System.Windows.Forms.Label();
+            this.CustomLabelComboBox = new System.Windows.Forms.ComboBox();
+            this.CharacterLabel = new System.Windows.Forms.Label();
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.MainTableLayoutPanel.SuspendLayout();
             this.AccountStatusTableLayoutPanel.SuspendLayout();
@@ -107,6 +110,7 @@
             this.AccountStatusTableLayoutPanel.ColumnCount = 2;
             this.AccountStatusTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.AccountStatusTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.AccountStatusTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.AccountStatusTableLayoutPanel.Controls.Add(this.AccountStatusLabel, 0, 0);
             this.AccountStatusTableLayoutPanel.Controls.Add(this.AccountActivityLabel, 1, 0);
             this.AccountStatusTableLayoutPanel.Controls.Add(this.PaidUntilLabel, 0, 1);
@@ -118,6 +122,7 @@
             this.AccountStatusTableLayoutPanel.RowCount = 2;
             this.AccountStatusTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.AccountStatusTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.AccountStatusTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.AccountStatusTableLayoutPanel.Size = new System.Drawing.Size(136, 73);
             this.AccountStatusTableLayoutPanel.TabIndex = 11;
             // 
@@ -388,9 +393,12 @@
             // 
             this.SkillSummaryPanel.AutoSize = true;
             this.MainTableLayoutPanel.SetColumnSpan(this.SkillSummaryPanel, 2);
+            this.SkillSummaryPanel.Controls.Add(this.CustomLabelLink);
             this.SkillSummaryPanel.Controls.Add(this.RemapsCloneJumpSummaryLabel);
             this.SkillSummaryPanel.Controls.Add(this.tlpAttributes);
             this.SkillSummaryPanel.Controls.Add(this.SkillSummaryLabel);
+            this.SkillSummaryPanel.Controls.Add(this.CustomLabelComboBox);
+            this.SkillSummaryPanel.Controls.Add(this.CharacterLabel);
             this.SkillSummaryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SkillSummaryPanel.Location = new System.Drawing.Point(136, 131);
             this.SkillSummaryPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -398,6 +406,16 @@
             this.SkillSummaryPanel.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.SkillSummaryPanel.Size = new System.Drawing.Size(389, 73);
             this.SkillSummaryPanel.TabIndex = 4;
+            // 
+            // CustomLabelLink
+            // 
+            this.CustomLabelLink.AutoSize = true;
+            this.CustomLabelLink.Location = new System.Drawing.Point(138, 50);
+            this.CustomLabelLink.Name = "CustomLabelLink";
+            this.CustomLabelLink.Size = new System.Drawing.Size(0, 13);
+            this.CustomLabelLink.TabIndex = 7;
+            this.ToolTip.SetToolTip(this.CustomLabelLink, "Character label - click to edit");
+            this.CustomLabelLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.CustomLabelLink_LinkClicked);
             // 
             // RemapsCloneJumpSummaryLabel
             // 
@@ -554,6 +572,30 @@
             this.SkillSummaryLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.SkillSummaryLabel.MouseHover += new System.EventHandler(this.SkillSummaryLabel_MouseHover);
             // 
+            // CustomLabelComboBox
+            // 
+            this.CustomLabelComboBox.Location = new System.Drawing.Point(138, 47);
+            this.CustomLabelComboBox.MaxLength = 256;
+            this.CustomLabelComboBox.Name = "CustomLabelComboBox";
+            this.CustomLabelComboBox.Size = new System.Drawing.Size(130, 21);
+            this.CustomLabelComboBox.TabIndex = 3;
+            this.ToolTip.SetToolTip(this.CustomLabelComboBox, "Character label");
+            this.CustomLabelComboBox.Visible = false;
+            this.CustomLabelComboBox.SelectedIndexChanged += new System.EventHandler(this.CustomLabelComboBox_TextChanged);
+            this.CustomLabelComboBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.CustomLabelComboBox_KeyUp);
+            this.CustomLabelComboBox.Validated += new System.EventHandler(this.CustomLabelComboBox_TextChanged);
+            // 
+            // CharacterLabel
+            // 
+            this.CharacterLabel.AutoSize = true;
+            this.CharacterLabel.Location = new System.Drawing.Point(89, 50);
+            this.CharacterLabel.Margin = new System.Windows.Forms.Padding(0);
+            this.CharacterLabel.Name = "CharacterLabel";
+            this.CharacterLabel.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.CharacterLabel.Size = new System.Drawing.Size(46, 13);
+            this.CharacterLabel.TabIndex = 3;
+            this.CharacterLabel.Text = "Label:";
+            // 
             // ToolTip
             // 
             this.ToolTip.AutoPopDelay = 5000000;
@@ -631,5 +673,8 @@
         private System.Windows.Forms.Label lblINTAttribute;
         private System.Windows.Forms.Label SkillSummaryLabel;
         private System.Windows.Forms.Label RemapsCloneJumpSummaryLabel;
+        private System.Windows.Forms.ComboBox CustomLabelComboBox;
+        private System.Windows.Forms.Label CharacterLabel;
+        private System.Windows.Forms.LinkLabel CustomLabelLink;
     }
 }

@@ -15,7 +15,9 @@ using EVEMon.Common.Serialization.Settings;
 using EVEMon.Common.SettingsObjects;
 using EVEMon.Common.Serialization.Esi;
 using EVEMon.Common.Service;
-using System.Globalization;
+using EVEMon.Common.Helpers;
+
+using AccountStatusType = EVEMon.Common.Models.AccountStatus.AccountStatusType;
 
 namespace EVEMon.Common.Models
 {
@@ -25,8 +27,12 @@ namespace EVEMon.Common.Models
     [EnforceUIThreadAffinity]
     public abstract class Character : BaseCharacter
     {
-        // Character
+        // Character name
         private string m_name;
+        private string m_label;
+
+        // Home station
+        private long homeStation;
 
         // Attributes
         private readonly CharacterAttribute[] m_attributes = new CharacterAttribute[5];
@@ -52,6 +58,7 @@ namespace EVEMon.Common.Models
 
             Identity = identity;
             Guid = guid;
+            m_label = string.Empty;
 
             Corporation = new Corporation(this);
 
@@ -80,38 +87,56 @@ namespace EVEMon.Common.Models
         /// Updates the character's account status based on the last known status and the
         /// current skill queue / training times.
         /// </summary>
-        /// <param name="statusType">The current account status</param>
-        public void UpdateAccountStatus(AccountStatus.AccountStatusType statusType =
-            AccountStatus.AccountStatusType.Unknown)
+        /// <param name="status">The current account status</param>
+        public void UpdateAccountStatus(AccountStatusType status = AccountStatusType.Unknown)
         {
             var skill = CurrentlyTrainingSkill;
 
             if (skill != null && skill.IsTraining)
             {
-                // Try to determine account status based on training time
-                var hoursToTrain = (skill.EndTime - skill.StartTime).TotalHours;
-                var spToTrain = skill.EndSP - skill.StartSP;
-                if (hoursToTrain > 0 && spToTrain > 0)
+                if (SkillPoints > EveConstants.MaxAlphaSkillTraining)
                 {
-                    // spPerHour must be greater than zero since numerator and denominator are
-                    var spPerHour = spToTrain / hoursToTrain;
-                    var rate = (int)Math.Round(GetOmegaSPPerHour(skill.Skill) / spPerHour, 0);
-                    switch (rate)
+                    status = AccountStatusType.Omega;
+                }
+                else
+                {
+                    // Try to determine account status based on training time
+                    var hoursToTrain = (skill.EndTime - skill.StartTime).TotalHours;
+                    var spToTrain = skill.EndSP - skill.StartSP;
+                    if (hoursToTrain > 0 && spToTrain > 0)
                     {
-                    case 1:
-                        statusType = AccountStatus.AccountStatusType.Omega;
-                        break;
-                    case 2:
-                        statusType = AccountStatus.AccountStatusType.Alpha;
-                        break;
-                    default:
-                        statusType = AccountStatus.AccountStatusType.Unknown;
-                        break;
+                        // spPerHour must be greater than zero since both the numerator and
+                        // denominator are
+                        var spPerHour = spToTrain / hoursToTrain;
+                        double rate = GetOmegaSPPerHour(skill.Skill) / spPerHour;
+                        // Allow for small margin of error
+                        if (rate < 1.2 && rate > 0.8)
+                            status = AccountStatusType.Omega;
+                        else if (rate > 1.1)
+                            status = AccountStatusType.Alpha;
                     }
                 }
             }
 
-            CharacterStatus = new AccountStatus(statusType);
+            foreach (var sk in Skills)
+            {
+                // Is the skill level being limited by alpha status?
+                if (sk.ActiveLevel < sk.Level)
+                {
+                    // Active level is being limited by alpha status.
+                    status = AccountStatusType.Alpha;
+                    break;
+                }
+                // Has the skill alpha limit been exceeded?
+                if (sk.ActiveLevel > sk.StaticData.AlphaLimit)
+                {
+                    // Active level is greater than alpha limit, only on Omega.
+                    status = AccountStatusType.Omega;
+                    break;
+                }
+            }
+
+            CharacterStatus = new AccountStatus(status);
         }
 
         #endregion
@@ -163,7 +188,13 @@ namespace EVEMon.Common.Models
         /// <summary>
         /// Gets the home station identifier.
         /// </summary>
-        public long HomeStationID { get; private set; }
+        public Station HomeStation
+        {
+            get
+            {
+                return EveIDToStation.GetIDToStation(homeStation, this as CCPCharacter);
+            }
+        }
 
         /// <summary>
         /// Gets an adorned name, with (file), (url) or (cached) labels.
@@ -293,12 +324,34 @@ namespace EVEMon.Common.Models
         #region Info
 
         /// <summary>
+        /// Gets or sets the character's custom label. This is used for display only.
+        /// </summary>
+        public string Label
+        {
+            get
+            {
+                return m_label;
+            }
+            set
+            {
+                m_label = value ?? string.Empty;
+                EveMonClient.OnCharacterLabelChanged(this);
+            }
+        }
+
+        /// <summary>
+        /// Generates a prefix to be used on the character's name in the overview and tab list
+        /// when the character has a custom label.
+        /// </summary>
+        public string LabelPrefix => m_label.IsEmptyOrUnknown() ? string.Empty : "[" + m_label + "] ";
+
+        /// <summary>
         /// Gets the character's ship name.
         /// </summary>
         public string ShipName { get; private set; }
 
         /// <summary>
-        /// Gets the character's shipType name.
+        /// Gets the character's ship type name.
         /// </summary>
         public string ShipTypeName { get; private set; }
 
@@ -313,7 +366,7 @@ namespace EVEMon.Common.Models
         public double SecurityStatus { get; private set; }
 
         /// <summary>
-        /// Gets or sets the character's  employment history.
+        /// Gets or sets the character's employment history.
         /// </summary>
         public EmploymentRecordCollection EmploymentHistory { get; }
 
@@ -340,10 +393,6 @@ namespace EVEMon.Common.Models
         public SolarSystem LastKnownSolarSystem => StaticGeography.GetSolarSystemByID(
             LastKnownLocation?.SolarSystemID ?? 0);
 
-        /// <summary>
-        /// Gets Alpha/Omega status for this character.
-        /// </summary>
-        public AccountStatus CharacterStatus { get; private set; }
         #endregion
 
 
@@ -481,7 +530,7 @@ namespace EVEMon.Common.Models
         /// <returns>Skill points earned per hour when training this skill</returns>
         public override float GetBaseSPPerHour(StaticSkill skill)
         {
-            return CharacterStatus.TrainingRate * base.GetBaseSPPerHour(skill);
+            return CharacterStatus.TrainingRate * base.GetOmegaSPPerHour(skill);
         }
 
         #endregion
@@ -540,16 +589,7 @@ namespace EVEMon.Common.Models
                 return EveMonConstants.UnknownText;
 
             // Check if in an NPC station or in an outpost
-            Station station = LastKnownStation;
-
-            // In a station ?
-            // Don't care if it's an outpost or regular station
-            // as station name will be displayed in docking info
-            if (station != null)
-                return $"{station.SolarSystem.FullLocation} ({station.SolarSystem.SecurityLevel:N1})";
-
-            // Has to be in a solar system at least
-            SolarSystem system = LastKnownSolarSystem;
+            var system = (LastKnownStation?.SolarSystem) ?? LastKnownSolarSystem;
 
             // Not in a solar system ??? Then show default location
             return system != null ? $"{system.FullLocation} ({system.SecurityLevel:N1})"
@@ -602,7 +642,7 @@ namespace EVEMon.Common.Models
             serial.Guid = Guid;
             serial.ID = Identity.CharacterID;
             serial.Name = m_name;
-            serial.HomeStationID = HomeStationID;
+            serial.HomeStationID = homeStation;
             serial.Birthday = Birthday;
             serial.Race = Race;
             serial.BloodLine = Bloodline;
@@ -624,6 +664,7 @@ namespace EVEMon.Common.Models
             serial.Balance = Balance;
 
             // Info
+            serial.Label = m_label;
             serial.ShipName = ShipName;
             serial.ShipTypeName = ShipTypeName;
             serial.SecurityStatus = SecurityStatus;
@@ -713,8 +754,7 @@ namespace EVEMon.Common.Models
         internal void Import(string result)
         {
             decimal balance;
-            if (decimal.TryParse(result, NumberStyles.AllowDecimalPoint, CultureInfo.
-                    InvariantCulture, out balance))
+            if (result.TryParseInv(out balance))
                 Balance = balance;
         }
 
@@ -757,7 +797,7 @@ namespace EVEMon.Common.Models
             // Information about clone jumping and clone moving
             JumpCloneLastJumpDate = clones.LastCloneJump;
             RemoteStationDate = clones.LastStationChange;
-            HomeStationID = clones.HomeLocation.LocationID;
+            homeStation = clones.HomeLocation.LocationID;
             ImplantSets.Import(clones);
         }
 
@@ -829,9 +869,13 @@ namespace EVEMon.Common.Models
                     var queuedSkill = dict[skill.ID];
                     if (queuedSkill.IsCompleted)
                     {
+                        // The active level could be less than the skill level if the character
+                        // finished an omega skill level (e.g. Repair Systems V) and then went
+                        // alpha without logging in. However, the alternative is to leave
+                        // ActiveLevel too low which breaks omega detection 100%
+                        skill.ActiveLevel = Math.Max(skill.ActiveLevel, queuedSkill.Level);
                         // Queued skill is completed, so make sure the imported skill is
                         // updated
-                        skill.ActiveLevel = Math.Max(skill.ActiveLevel, queuedSkill.Level);
                         skill.Level = Math.Max(skill.Level, queuedSkill.Level);
                         skill.Skillpoints = Math.Max(skill.Skillpoints, queuedSkill.EndSP);
                     }
@@ -846,6 +890,8 @@ namespace EVEMon.Common.Models
                 newSkills.AddLast(skill.ToXMLItem());
             }
             Skills.Import(newSkills, true);
+
+            UpdateMasteries();
         }
 
         /// <summary>
@@ -900,7 +946,7 @@ namespace EVEMon.Common.Models
         {
             // Bio
             m_name = serial.Name;
-            HomeStationID = serial.HomeStationID;
+            homeStation = serial.HomeStationID;
             Birthday = serial.Birthday;
             Race = serial.Race;
             Bloodline = serial.BloodLine;
@@ -921,16 +967,18 @@ namespace EVEMon.Common.Models
             JumpLastUpdateDate = serial.JumpLastUpdateDate;
             Balance = serial.Balance;
 
-            if (serial is SerializableSettingsCharacter)
+            var settingsChar = serial as SerializableSettingsCharacter;
+            if (settingsChar != null)
             {
                 // Info
-                ShipName = serial.ShipName;
-                ShipTypeName = serial.ShipTypeName;
-                SecurityStatus = serial.SecurityStatus;
-                LastKnownLocation = serial.LastKnownLocation;
+                m_label = settingsChar.Label ?? string.Empty;
+                ShipName = settingsChar.ShipName;
+                ShipTypeName = settingsChar.ShipTypeName;
+                SecurityStatus = settingsChar.SecurityStatus;
+                LastKnownLocation = settingsChar.LastKnownLocation;
 
                 // Employment History
-                EmploymentHistory.Import(serial.EmploymentHistory);
+                EmploymentHistory.Import(settingsChar.EmploymentHistory);
             }
 
             // Attributes
@@ -943,11 +991,20 @@ namespace EVEMon.Common.Models
             // Skills
             Skills.Import(serial.Skills, serial is SerializableAPICharacterSheet);
 
-            // Certificates
-            Certificates.Initialize();
+            UpdateMasteries();
+        }
 
-            // Masteries
-            MasteryShips.Initialize();
+        /// <summary>
+        /// Updates the character masteries and certificates, such as after a skill level change.
+        /// </summary>
+        private void UpdateMasteries()
+        {
+            TaskHelper.RunCPUBoundTaskAsync(() =>
+            {
+                // Certificates and masteries
+                Certificates.Initialize();
+                MasteryShips.Initialize();
+            });
         }
 
         /// <summary>

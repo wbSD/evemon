@@ -136,8 +136,8 @@ namespace EVEMon.Common.Models
         /// <summary>
         /// Gets the character identities for this API key.
         /// </summary>
-        public IEnumerable<CharacterIdentity> CharacterIdentities 
-            => EveMonClient.CharacterIdentities.Where(characterID => characterID.ESIKeys.Contains(this));
+        public IEnumerable<CharacterIdentity> CharacterIdentities => EveMonClient.
+            CharacterIdentities.Where(characterID => characterID.ESIKeys.Contains(this));
         
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="ESIKey"/> is monitored.
@@ -224,6 +224,8 @@ namespace EVEMon.Common.Models
             else
             {
                 AccessToken = response.AccessToken;
+                // PKCE routinely updates refresh tokens
+                RefreshToken = response.RefreshToken;
                 m_keyExpires = response.ExpiryUTC;
                 // Have to make a second request for the character information!
                 SSOAuthenticationService.GetTokenInfo(AccessToken, OnTokenInfo);
@@ -240,7 +242,7 @@ namespace EVEMon.Common.Models
             if (result.HasError)
             {
                 HasError = true;
-                EveMonClient.Notifications.NotifyCharacterListError(ID, result);
+                EveMonClient.Notifications.NotifyCharacterListError(this, result);
             }
             else
             {

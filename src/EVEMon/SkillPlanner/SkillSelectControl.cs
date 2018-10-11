@@ -217,7 +217,7 @@ namespace EVEMon.SkillPlanner
             {
                 cbSkillFilter.Items.RemoveAt(Index);
             }
-            cbSkillFilter.Items.Add(SkillFilter.TrialAccountFriendly.GetDescription());
+            cbSkillFilter.Items.Add(SkillFilter.AlphaFriendly.GetDescription());
         }
 
         /// <summary>
@@ -570,20 +570,19 @@ namespace EVEMon.SkillPlanner
         /// <returns></returns>
         private Func<Skill, bool> GetFilter()
         {
-            SkillFilter skillFilter =
-                (SkillFilter)
-                    (EnumExtensions.GetValueFromDescription<SkillFilter>((string)cbSkillFilter.SelectedItem) ??
-                     SkillFilter.All);
+            var skillFilter = (SkillFilter)(EnumExtensions.GetValueFromDescription<
+                SkillFilter>((string)cbSkillFilter.SelectedItem) ?? SkillFilter.All);
 
-            lblFilterBy.Enabled = cbFilterByAttributes.Enabled = skillFilter == SkillFilter.ByAttributes;
+            lblFilterBy.Enabled = cbFilterByAttributes.Enabled = (skillFilter ==
+                SkillFilter.ByAttributes);
 
             EveAttribute primary = EveAttribute.None;
             EveAttribute secondary = EveAttribute.None;
             if (cbFilterByAttributes.Enabled)
             {
                 string[] attributes = cbFilterByAttributes.SelectedItem.ToString().Split('-');
-                primary = (EveAttribute)Enum.Parse(typeof(EveAttribute), attributes.First().Trim());
-                secondary = (EveAttribute)Enum.Parse(typeof(EveAttribute), attributes.Last().Trim());
+                Enum.TryParse(attributes.First().Trim(), out primary);
+                Enum.TryParse(attributes.Last().Trim(), out secondary);
             }
 
             switch (skillFilter)
@@ -594,8 +593,8 @@ namespace EVEMon.SkillPlanner
                     return x => x.PrimaryAttribute == primary && x.SecondaryAttribute == secondary;
                 case SkillFilter.Known:
                     return x => x.IsKnown;
-                case SkillFilter.TrialAccountFriendly:
-                    return x => x.IsTrainableOnTrialAccount;
+                case SkillFilter.AlphaFriendly:
+                    return x => x.StaticData.AlphaFriendly;
                 case SkillFilter.Unknown:
                     return x => !x.IsKnown;
                 case SkillFilter.UnknownAndNotOwned:

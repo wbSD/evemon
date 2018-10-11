@@ -434,14 +434,12 @@ namespace EVEMon.SkillPlanner
         /// <exception cref="System.ArgumentNullException">skill</exception>
         internal void ShowSkillInBrowser(Skill skill)
         {
-            skill.ThrowIfNull(nameof(skill));
-
             // Quit if it's an "Unknown" skill
-            if (skill.ID == Int32.MaxValue)
-                return;
-
-            ShowSkillBrowser();
-            skillBrowser.SelectedSkill = skill;
+            if (skill != null && skill.ID != int.MaxValue && skill.ID != 0)
+            {
+                ShowSkillBrowser();
+                skillBrowser.SelectedSkill = skill;
+            }
         }
 
         /// <summary>
@@ -729,9 +727,8 @@ namespace EVEMon.SkillPlanner
         /// <param name="uniqueCount">The unique count.</param>
         internal void UpdateSkillStatusLabel(bool selected, int skillCount, int uniqueCount)
         {
-            SkillsStatusLabel.Text = $"{skillCount} skill{(skillCount == 1 ? String.Empty : "s")} " +
-                                     $"{(selected ? "selected" : "planned")} " +
-                                     $"({uniqueCount} unique)";
+            SkillsStatusLabel.Text = $"{skillCount} skill{skillCount.S()} " +
+                $"{(selected ? "selected" : "planned")} ({uniqueCount} unique)";
         }
 
         /// <summary>
@@ -742,9 +739,10 @@ namespace EVEMon.SkillPlanner
         /// <param name="totalTime">The total time.</param>
         internal void UpdateTimeStatusLabel(bool selected, int skillCount, TimeSpan totalTime)
         {
+            string time = totalTime.ToDescriptiveText(DescriptiveTextOptions.IncludeCommas);
             TimeStatusLabel.AutoToolTip = false;
-            TimeStatusLabel.Text = $"{totalTime.ToDescriptiveText(DescriptiveTextOptions.IncludeCommas)} to train " +
-                                   $"{(selected ? $"selected skill{(skillCount == 1 ? String.Empty : "s")}" : "whole plan")}";
+            TimeStatusLabel.Text = time + " to train " + (selected ?
+                $"selected skill{skillCount.S()}" : "whole plan");
         }
 
         /// <summary>
@@ -760,13 +758,11 @@ namespace EVEMon.SkillPlanner
             if (totalcost > 0)
             {
                 CostStatusLabel.ToolTipText = $"{totalcost:N2} ISK required to purchase " +
-                                              $"{(selected ? "selected" : "all")} " +
-                                              $"skill{(m_plan.UniqueSkillsCount == 1 ? String.Empty : "s")} anew";
+                    (selected ? "selected" : "all") +
+                    $" skill{(m_plan.UniqueSkillsCount.S())} anew";
             }
 
-            CostStatusLabel.Text = cost > 0
-                ? $"{cost:N2} ISK required"
-                : "0 ISK required";
+            CostStatusLabel.Text = cost > 0 ? $"{cost:N2} ISK required" : "0 ISK required";
         }
 
         /// <summary>
@@ -782,15 +778,14 @@ namespace EVEMon.SkillPlanner
             if (skillPoints > 0)
             {
                 SkillPointsStatusLabel.ToolTipText = $"{skillPoints:N0} skill points required to train " +
-                                                     $"{(selected ? "selected" : "all")} " +
-                                                     $"skill{(skillCount == 1 ? String.Empty : "s")}";
+                    (selected ? "selected" : "all") + $" skill{skillCount.S()}";
             }
 
-            int skillInjectorsCount = m_plan.Character.GetRequiredSkillInjectorsForSkillPoints(skillPoints);
-            SkillPointsStatusLabel.Text = skillPoints > 0
-                ? $"{skillPoints:N0} SP required ({skillInjectorsCount:N0} Skill Injector" +
-                  $"{(Math.Abs(skillInjectorsCount - 1) < Double.Epsilon ? String.Empty : "s")})"
-                : "0 SP required";
+            int skillInjectorsCount = m_plan.Character.GetRequiredSkillInjectorsForSkillPoints(
+                skillPoints);
+            SkillPointsStatusLabel.Text = skillPoints > 0 ?
+                $"{skillPoints:N0} SP required ({skillInjectorsCount:N0} Skill Injector" +
+                skillInjectorsCount.S() : "0 SP required";
         }
 
         /// <summary>

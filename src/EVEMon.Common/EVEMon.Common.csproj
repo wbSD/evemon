@@ -36,13 +36,14 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;NO_THREAD_SAFETY</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -169,6 +170,7 @@
       <DependentUpon>NetworkConstants.resx</DependentUpon>
     </Compile>
     <Compile Include="Controls\CustomCursors.cs" />
+    <Compile Include="CustomEventArgs\LabelChangedEventArgs.cs" />
     <Compile Include="Data\Faction.cs" />
     <Compile Include="Data\Planet.cs" />
     <Compile Include="Enumerations\AttributeOptimizationStrategy.cs" />

@@ -137,7 +137,8 @@ namespace EVEMon.Common.Serialization.Esi
                     break;
                 default:
                     // Cannot actually fail, but the exception would suck
-                    if (int.TryParse(value, out jumps) && jumps > 0 && jumps < EveConstants.RegionRange)
+                    if (value.TryParseInv(out jumps) && jumps > 0 && jumps < EveConstants.
+                            RegionRange)
                         Range = jumps;
                     break;
                 }
@@ -183,6 +184,15 @@ namespace EVEMon.Common.Serialization.Esi
         /// </summary>
         [DataMember(Name = "issued_by", EmitDefaultValue = false, IsRequired = false)]
         public long IssuedBy { get; set; }
+
+        /// <summary>
+        /// Whether this order is for a corporation, made on behalf of a player.
+        /// This is slightly different from contract and industry job behavior (CCP why?)
+        ///  [I can tell that these endpoints were written by different people with slightly
+        ///  different specs]
+        /// </summary>
+        [DataMember(Name = "is_corporation", EmitDefaultValue = false, IsRequired = false)]
+        public bool IsCorporation { get; set; }
 
         /// <summary>
         /// The time this order was issued.
