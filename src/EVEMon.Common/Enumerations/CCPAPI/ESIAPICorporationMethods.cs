@@ -160,7 +160,7 @@ namespace EVEMon.Common.Enumerations.CCPAPI
         /// <summary>
         /// Wallet journal for all corporate accounts.
         /// </summary>
-        [ESIMethod("/v2/corporations/{0:D}/wallets/{1:D}/journal/", Scope = "esi-wallet.read_corporation_wallets.v1")]
+        [ESIMethod("/v3/corporations/{0:D}/wallets/{1:D}/journal/", Scope = "esi-wallet.read_corporation_wallets.v1")]
         CorporationWalletJournal = 1 << 23,
 
         /// <summary>
