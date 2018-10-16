@@ -542,6 +542,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApiCredentialsManagement\ESIScopesWindow.resx">
       <DependentUpon>ESIScopesWindow.cs</DependentUpon>
+	</EmbeddedResource>
     <EmbeddedResource Include="BlankCharacter\BlankCharacterControl.resx">
       <DependentUpon>BlankCharacterControl.cs</DependentUpon>
     </EmbeddedResource>
