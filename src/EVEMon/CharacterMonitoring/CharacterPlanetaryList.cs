@@ -23,7 +23,7 @@ using EVEMon.SkillPlanner;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterPlanetaryList : UserControl, IListView
+    internal sealed partial class CharacterPlanetaryList : EVEMonControl, IListView
     {
         #region Fields
 

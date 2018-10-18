@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using EVEMon.Common.Controls;
 using EVEMon.Common.Enumerations.CCPAPI;
 using EVEMon.Common.Enumerations.UISettings;
 using EVEMon.Common.Extensions;
@@ -14,7 +15,7 @@ using EVEMon.Common.SettingsObjects;
 
 namespace EVEMon.SettingsUI
 {
-    public partial class UpdateSettingsControl : UserControl
+    public partial class UpdateSettingsControl : EVEMonControl
     {
         // Would have love to use tableLayoutPanel, unfortunately, they are just a piece of trash.
         private const int RowHeight = 28;

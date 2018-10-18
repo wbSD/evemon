@@ -23,7 +23,7 @@ namespace EVEMon.Common.Controls
     /// set using the ImageSize property. The default Size property is
     /// overriden.
     /// </remarks>
-    public partial class EveImage : UserControl
+    public partial class EveImage : EVEMonControl
     {
         private readonly Timer m_timer = new Timer();
         private MouseEventArgs m_mouseEvent;

@@ -21,7 +21,7 @@ namespace EVEMon.SkillPlanner
     /// <summary>
     /// Represents a control to select certificates
     /// </summary>
-    public partial class CertificateSelectControl : UserControl
+    public partial class CertificateSelectControl : EVEMonControl
     {
         // Blank image list for 'Safe for work' setting
         private readonly ImageList m_emptyImageList = new ImageList();

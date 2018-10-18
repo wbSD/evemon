@@ -20,7 +20,7 @@ using EVEMon.SkillPlanner;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterResearchPointsList : UserControl, IListView
+    internal sealed partial class CharacterResearchPointsList : EVEMonControl, IListView
     {
         #region Fields
 

@@ -28,7 +28,7 @@ namespace EVEMon.CharacterMonitoring
     /// <summary>
     /// Displays a list of kill logs.
     /// </summary>
-    internal sealed partial class CharacterKillLogList : UserControl, IListView
+    internal sealed partial class CharacterKillLogList : EVEMonControl, IListView
     {
         #region Fields
 

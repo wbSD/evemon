@@ -17,7 +17,7 @@ namespace EVEMon.SkillPlanner
     /// <summary>
     /// The standard control to search for an item
     /// </summary>
-    public partial class EveObjectSelectControl : UserControl
+    public partial class EveObjectSelectControl : EVEMonControl
     {
         public event EventHandler SelectionChanged;
 

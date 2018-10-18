@@ -55,7 +55,7 @@ namespace EVEMon.SkillPlanner
             this.tsbClipboardImport = new System.Windows.Forms.ToolStripButton();
             this.ttToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.sfdSave = new System.Windows.Forms.SaveFileDialog();
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabControl = new EVEMon.Common.Controls.EVEMonTabControl();
             this.tpPlanEditor = new System.Windows.Forms.TabPage();
             this.planEditor = new EVEMon.SkillPlanner.PlanEditorControl();
             this.tpSkillBrowser = new System.Windows.Forms.TabPage();
@@ -493,7 +493,7 @@ namespace EVEMon.SkillPlanner
         private System.Windows.Forms.ToolTip ttToolTip;
         private System.Windows.Forms.ToolStripButton tsbCopyToClipboard;
         private System.Windows.Forms.SaveFileDialog sfdSave;
-        private System.Windows.Forms.TabControl tabControl;
+        private EVEMon.Common.Controls.EVEMonTabControl tabControl;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton tsbImplantCalculator;
         private System.Windows.Forms.TabPage tpItemBrowser;

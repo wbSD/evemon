@@ -14,7 +14,7 @@ using EVEMon.Common.Service;
 
 namespace EVEMon.Common.Controls
 {
-    public partial class CharacterPortrait : UserControl
+    public partial class CharacterPortrait : EVEMonControl
     {
         private Character m_character;
         private bool m_updatingPortrait;

@@ -14,6 +14,7 @@ using EVEMon.Common.Enumerations.UISettings;
 using EVEMon.Common.Extensions;
 using EVEMon.Common.Factories;
 using EVEMon.Common.Helpers;
+using EVEMon.Common.Interfaces;
 using EVEMon.Common.Models;
 using EVEMon.Common.Notifications;
 using EVEMon.Common.Properties;

@@ -24,7 +24,7 @@ namespace EVEMon.CharacterMonitoring
     /// <summary>
     /// Implements the header component of the main character monitor user interface.
     /// </summary>
-    internal sealed partial class CharacterMonitorHeader : UserControl
+    internal sealed partial class CharacterMonitorHeader : EVEMonControl
     {
         #region Fields
 

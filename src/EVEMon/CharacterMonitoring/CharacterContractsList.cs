@@ -25,7 +25,7 @@ using EVEMon.SkillPlanner;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterContractsList : UserControl, IListView
+    internal sealed partial class CharacterContractsList : EVEMonControl, IListView
     {
         #region Fields
 

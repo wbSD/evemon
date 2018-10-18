@@ -6,13 +6,14 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using EVEMon.Common;
 using EVEMon.Common.Constants;
+using EVEMon.Common.Controls;
 using EVEMon.Common.Factories;
 using EVEMon.Common.Interfaces;
 using EVEMon.Common.Models;
 
 namespace EVEMon.Controls
 {
-    public partial class ReadingPane : UserControl
+    public partial class ReadingPane : EVEMonControl
     {
         private IEveMessage m_selectedObject;
 

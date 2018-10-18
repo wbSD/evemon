@@ -21,7 +21,7 @@ using EVEMon.DetailsWindow;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterMonitorBody : UserControl
+    internal sealed partial class CharacterMonitorBody : EVEMonControl
     {
         #region Fields
 

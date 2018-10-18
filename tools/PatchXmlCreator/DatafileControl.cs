@@ -1,10 +1,11 @@
 using System;
 using System.Windows.Forms;
+using EVEMon.Common.Controls;
 using EVEMon.Common.Factories;
 
 namespace EVEMon.PatchXmlCreator
 {
-    internal partial class DatafileControl : UserControl
+    internal partial class DatafileControl : EVEMonControl
     {
         /// <summary>
         /// Constructor.

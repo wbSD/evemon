@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EVEMon.Common;
 using EVEMon.Common.CloudStorageServices;
+using EVEMon.Common.Controls;
 using EVEMon.Common.CustomEventArgs;
 using EVEMon.Common.Enumerations;
 using EVEMon.Common.Factories;
 
 namespace EVEMon.SettingsUI
 {
-    public partial class CloudStorageServiceControl : UserControl
+    public partial class CloudStorageServiceControl : EVEMonControl
     {
         private bool m_authCodeRequested;
 

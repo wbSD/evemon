@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using EVEMon.Common.Extensions;
+using EVEMon.Common.Interfaces;
 using EVEMon.Common.SettingsObjects;
 
 namespace EVEMon.Common.Controls
@@ -11,7 +13,7 @@ namespace EVEMon.Common.Controls
     /// <summary>
     /// This base class provides the common icon shared by all of our forms, along with an optional position storing service.
     /// </summary>
-    public partial class EVEMonForm : Form
+    public partial class EVEMonForm : Form, IThemeable
     {
         protected const int MaxTitleLength = 259;
 
@@ -45,6 +47,7 @@ namespace EVEMon.Common.Controls
             RestoreLocation();
             m_loaded = true;
             SaveLocation();
+            this.FindAndRecolorControls();
         }
 
         /// <summary>

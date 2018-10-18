@@ -1,5 +1,6 @@
 ﻿using EVEMon.Common;
 using EVEMon.Common.Constants;
+using EVEMon.Common.Controls;
 using EVEMon.Common.Enumerations;
 using EVEMon.Common.Enumerations.UISettings;
 using EVEMon.Common.ExternalCalendar;
@@ -16,7 +17,7 @@ using System.Windows.Forms;
 
 namespace EVEMon.SettingsUI
 {
-    public partial class ExternalCalendarControl : UserControl
+    public partial class ExternalCalendarControl : EVEMonControl
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ExternalCalendarControl"/> class.

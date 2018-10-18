@@ -32,7 +32,7 @@ namespace EVEMon.SkillPlanner
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabControl = new EVEMon.Common.Controls.EVEMonTabControl();
             this.tabSummary = new System.Windows.Forms.TabPage();
             this.lvPoints = new System.Windows.Forms.ListView();
             this.columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -169,7 +169,7 @@ namespace EVEMon.SkillPlanner
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl;
+        private EVEMon.Common.Controls.EVEMonTabControl tabControl;
         private System.Windows.Forms.TabPage tabSummary;
         private System.Windows.Forms.ListView lvPoints;
         private System.Windows.Forms.ColumnHeader columnHeader;

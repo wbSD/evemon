@@ -34,7 +34,7 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabControl = new EVEMon.Common.Controls.EVEMonTabControl();
             this.BalanceTabPage = new System.Windows.Forms.TabPage();
             this.BalanceChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.AmountTabPage = new System.Windows.Forms.TabPage();
@@ -130,7 +130,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl;
+        private EVEMon.Common.Controls.EVEMonTabControl tabControl;
         private System.Windows.Forms.TabPage BalanceTabPage;
         private System.Windows.Forms.TabPage AmountTabPage;
         private System.Windows.Forms.DataVisualization.Charting.Chart AmountChart;

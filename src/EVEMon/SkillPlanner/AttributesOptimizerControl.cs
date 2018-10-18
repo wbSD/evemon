@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using EVEMon.Common.Constants;
+using EVEMon.Common.Controls;
 using EVEMon.Common.CustomEventArgs;
 using EVEMon.Common.Enumerations;
 using EVEMon.Common.Extensions;
@@ -15,7 +16,7 @@ namespace EVEMon.SkillPlanner
     /// <summary>
     /// Control that shows attribute remapping and allows to adjust it.
     /// </summary>
-    public partial class AttributesOptimizerControl : UserControl
+    public partial class AttributesOptimizerControl : EVEMonControl
     {
         private readonly Character m_character;
         private readonly BasePlan m_plan;

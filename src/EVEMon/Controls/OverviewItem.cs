@@ -24,7 +24,7 @@ namespace EVEMon.Controls
     /// <summary>
     /// Represents an item displayed on the overview.
     /// </summary>
-    public partial class OverviewItem : UserControl
+    public partial class OverviewItem : EVEMonControl
     {
         #region Fields
 

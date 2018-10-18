@@ -12,7 +12,7 @@ using EVEMon.Common.Models;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterEmploymentHistoryList : UserControl
+    internal sealed partial class CharacterEmploymentHistoryList : EVEMonControl
     {
         #region Fields
 

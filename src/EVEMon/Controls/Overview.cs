@@ -14,7 +14,7 @@ using EVEMon.Common.Models;
 
 namespace EVEMon.Controls
 {
-    public partial class Overview : UserControl
+    public partial class Overview : EVEMonControl
     {
         public event EventHandler<CharacterChangedEventArgs> CharacterClicked;
 

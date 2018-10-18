@@ -5,7 +5,7 @@ using EVEMon.Common.Extensions;
 
 namespace EVEMon.Common.Controls
 {
-    public partial class ApiErrorTroubleshooter : UserControl
+    public partial class ApiErrorTroubleshooter : EVEMonControl
     {
         /// <summary>
         /// Occurs when a resolution has been completed.

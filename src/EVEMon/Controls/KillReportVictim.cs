@@ -14,7 +14,7 @@ using EVEMon.SkillPlanner;
 
 namespace EVEMon.Controls
 {
-    public partial class KillReportVictim : UserControl
+    public partial class KillReportVictim : EVEMonControl
     {
         private KillLog m_killLog;
 

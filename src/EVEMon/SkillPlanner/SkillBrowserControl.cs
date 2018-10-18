@@ -16,7 +16,7 @@ using EVEMon.NotificationWindow;
 
 namespace EVEMon.SkillPlanner
 {
-    public partial class SkillBrowserControl : UserControl
+    public partial class SkillBrowserControl : EVEMonControl
     {
         private Skill m_selectedSkill;
         private Plan m_plan;

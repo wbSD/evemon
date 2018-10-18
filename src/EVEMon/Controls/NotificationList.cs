@@ -25,7 +25,7 @@ namespace EVEMon.Controls
     /// <summary>
     /// Displays a list of notifications.
     /// </summary>
-    public partial class NotificationList : UserControl
+    public partial class NotificationList : EVEMonControl
     {
         #region Fields
 

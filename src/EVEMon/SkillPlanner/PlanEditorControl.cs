@@ -30,7 +30,7 @@ namespace EVEMon.SkillPlanner
     /// <summary>
     /// The main control of the plan editor window, the list of plan entries.
     /// </summary>
-    public sealed partial class PlanEditorControl : UserControl
+    public sealed partial class PlanEditorControl : EVEMonControl
     {
         #region Fields
 

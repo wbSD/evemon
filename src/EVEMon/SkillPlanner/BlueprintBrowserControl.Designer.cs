@@ -33,7 +33,7 @@ namespace EVEMon.SkillPlanner
             this.components = new System.ComponentModel.Container();
             this.gbRequiredSkills = new System.Windows.Forms.GroupBox();
             this.requiredSkillsControl = new EVEMon.SkillPlanner.RequiredSkillsControl();
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabControl = new EVEMon.Common.Controls.EVEMonTabControl();
             this.tpManufacturing = new System.Windows.Forms.TabPage();
             this.gbManufBoM = new System.Windows.Forms.GroupBox();
             this.lvManufacturing = new System.Windows.Forms.ListView();
@@ -1048,7 +1048,7 @@ namespace EVEMon.SkillPlanner
 
         private System.Windows.Forms.GroupBox gbRequiredSkills;
         private RequiredSkillsControl requiredSkillsControl;
-        private System.Windows.Forms.TabControl tabControl;
+        private EVEMon.Common.Controls.EVEMonTabControl tabControl;
         private System.Windows.Forms.TabPage tpManufacturing;
         private System.Windows.Forms.ListView lvManufacturing;
         private System.Windows.Forms.TabPage tpInvention;

@@ -15,7 +15,7 @@ using EVEMon.Common.Service;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterFactionalWarfareStatsList : UserControl
+    internal sealed partial class CharacterFactionalWarfareStatsList : EVEMonControl
     {
         #region Fields
 

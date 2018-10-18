@@ -6,10 +6,11 @@ using EVEMon.Common.Enumerations;
 using EVEMon.Common.Factories;
 using EVEMon.Common.Helpers;
 using EVEMon.Common.Extensions;
+using EVEMon.Common.Controls;
 
 namespace EVEMon.BlankCharacter
 {
-    public partial class BlankCharacterControl : UserControl
+    public partial class BlankCharacterControl : EVEMonControl
     {
         /// <summary>
         /// A list of all of the bloodlines sorted by the order they appear in the picture

@@ -17,7 +17,7 @@ using EVEMon.Common.Properties;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterContactList : UserControl
+    internal sealed partial class CharacterContactList : EVEMonControl
     {
         #region Fields
 

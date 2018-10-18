@@ -17,7 +17,7 @@ using EVEMon.SkillPlanner;
 
 namespace EVEMon.Controls
 {
-    public partial class KillReportFittingContent : UserControl
+    public partial class KillReportFittingContent : EVEMonControl
     {
         #region Fields
 

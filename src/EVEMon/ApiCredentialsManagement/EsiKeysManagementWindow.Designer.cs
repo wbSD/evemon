@@ -43,7 +43,7 @@ namespace EVEMon.ApiCredentialsManagement
             this.esiKeyListLabel = new System.Windows.Forms.Label();
             this.charactersListLabel = new System.Windows.Forms.Label();
             this.closeButton = new System.Windows.Forms.Button();
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabControl = new EVEMon.Common.Controls.EVEMonTabControl();
             this.charactersTabPage = new System.Windows.Forms.TabPage();
             this.charactersPagePanel = new System.Windows.Forms.Panel();
             this.charactersMultiPanel = new EVEMon.Common.Controls.MultiPanel.MultiPanel();
@@ -475,7 +475,7 @@ namespace EVEMon.ApiCredentialsManagement
         #endregion
 
         private System.Windows.Forms.Button closeButton;
-        private System.Windows.Forms.TabControl tabControl;
+        private EVEMon.Common.Controls.EVEMonTabControl tabControl;
         private System.Windows.Forms.TabPage esiKeysTabPage;
         private System.Windows.Forms.TabPage charactersTabPage;
         private System.Windows.Forms.ListView charactersListView;

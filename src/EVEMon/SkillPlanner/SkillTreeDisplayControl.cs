@@ -19,7 +19,7 @@ namespace EVEMon.SkillPlanner
     /// <summary>
     /// Represents the diagram displayed on the skill browser.
     /// </summary>
-    public partial class SkillTreeDisplayControl : UserControl
+    public partial class SkillTreeDisplayControl : EVEMonControl
     {
         #region Fields
 

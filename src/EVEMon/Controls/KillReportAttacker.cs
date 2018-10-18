@@ -14,7 +14,7 @@ using EVEMon.SkillPlanner;
 
 namespace EVEMon.Controls
 {
-    public partial class KillReportAttacker : UserControl
+    public partial class KillReportAttacker : EVEMonControl
     {
         private SerializableKillLogAttackersListItem m_attacker;
         private Item m_selectedItem;

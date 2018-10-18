@@ -17,7 +17,7 @@ using EVEMon.Common.Models;
 
 namespace EVEMon.SkillPlanner
 {
-    public partial class CertificateBrowserControl : UserControl
+    public partial class CertificateBrowserControl : EVEMonControl
     {
         private CertificateClass m_selectedCertificate;
         private Plan m_plan;

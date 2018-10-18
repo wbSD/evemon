@@ -34,7 +34,7 @@ namespace EVEMon.SettingsUI
             this.btnUseDefaults = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl1 = new EVEMon.Common.Controls.EVEMonTabControl();
             this.tpGeneral = new System.Windows.Forms.TabPage();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -487,7 +487,7 @@ namespace EVEMon.SettingsUI
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOK;
-        private System.Windows.Forms.TabControl tabControl1;
+        private EVEMon.Common.Controls.EVEMonTabControl tabControl1;
         private System.Windows.Forms.TabPage tpGeneral;
         private System.Windows.Forms.CheckBox cbShowServerStatus;
         private System.Windows.Forms.ToolTip ttHelp;

@@ -1,6 +1,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using EVEMon.Common;
+using EVEMon.Common.Controls;
 using EVEMon.Common.Models;
 using EVEMon.Common.Notifications;
 
@@ -9,7 +10,7 @@ namespace EVEMon.CharacterMonitoring
     /// <summary>
     /// Implements the content of each of the character tabs.
     /// </summary>
-    internal sealed partial class CharacterMonitor : UserControl
+    internal sealed partial class CharacterMonitor : EVEMonControl
     {
         #region Constructor
 

@@ -22,7 +22,7 @@ using EVEMon.Common.SettingsObjects;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterWalletTransactionsList : UserControl, IListView
+    internal sealed partial class CharacterWalletTransactionsList : EVEMonControl, IListView
     {
         #region Fields
 

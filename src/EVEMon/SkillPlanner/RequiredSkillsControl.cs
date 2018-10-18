@@ -19,7 +19,7 @@ namespace EVEMon.SkillPlanner
     /// <summary>
     /// User control to display required skills for a given eveobject and update a plan object for requirements not met
     /// </summary>
-    public partial class RequiredSkillsControl : UserControl
+    public partial class RequiredSkillsControl : EVEMonControl
     {
         private BlueprintActivity m_activity;
         private Item m_object;

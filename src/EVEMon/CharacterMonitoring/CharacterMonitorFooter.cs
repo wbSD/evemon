@@ -13,7 +13,7 @@ using EVEMon.Common.Scheduling;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterMonitorFooter : UserControl
+    internal sealed partial class CharacterMonitorFooter : EVEMonControl
     {
         private Character m_character;
 

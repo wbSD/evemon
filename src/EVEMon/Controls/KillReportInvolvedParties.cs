@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using EVEMon.Common.Constants;
+using EVEMon.Common.Controls;
 using EVEMon.Common.Models;
 using EVEMon.Common.Serialization.Eve;
 
 namespace EVEMon.Controls
 {
-    public partial class KillReportInvolvedParties : UserControl
+    public partial class KillReportInvolvedParties : EVEMonControl
     {
         private KillLog m_killLog;
 

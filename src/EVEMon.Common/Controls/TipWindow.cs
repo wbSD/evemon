@@ -6,7 +6,7 @@ using EVEMon.Common.Extensions;
 
 namespace EVEMon.Common.Controls
 {
-    public sealed partial class TipWindow : UserControl
+    public sealed partial class TipWindow : EVEMonControl
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TipWindow"/> class.

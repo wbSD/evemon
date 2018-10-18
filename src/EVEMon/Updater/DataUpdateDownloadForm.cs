@@ -143,7 +143,7 @@ namespace EVEMon.Updater
 
         #region DataUpdateDownloadControl class
 
-        private class DataUpdateDownloadControl : UserControl
+        private class DataUpdateDownloadControl : EVEMonControl
         {
             private Label m_label;
             private Label m_progressLabel;

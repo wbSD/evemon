@@ -41,7 +41,7 @@ namespace EVEMon.SkillPlanner
             this.shipSelectControl = new EVEMon.SkillPlanner.ShipSelectControl();
             this.gbRequiredSkills = new System.Windows.Forms.GroupBox();
             this.requiredSkillsControl = new EVEMon.SkillPlanner.RequiredSkillsControl();
-            this.tbCntrlShipInformation = new System.Windows.Forms.TabControl();
+            this.tbCntrlShipInformation = new EVEMon.Common.Controls.EVEMonTabControl();
             this.tbPgShipDetails = new System.Windows.Forms.TabPage();
             this.tbPgShipMastery = new System.Windows.Forms.TabPage();
             this.pnlMastery = new System.Windows.Forms.Panel();
@@ -449,7 +449,7 @@ namespace EVEMon.SkillPlanner
         private System.Windows.Forms.ToolStripMenuItem exportToCSVToolStripMenuItem;
         private System.Windows.Forms.GroupBox gbRequiredSkills;
         private RequiredSkillsControl requiredSkillsControl;
-        private System.Windows.Forms.TabControl tbCntrlShipInformation;
+        private EVEMon.Common.Controls.EVEMonTabControl tbCntrlShipInformation;
         private System.Windows.Forms.TabPage tbPgShipDetails;
         private System.Windows.Forms.TabPage tbPgShipMastery;
         private System.Windows.Forms.ToolStrip tlStrpPlanTo;

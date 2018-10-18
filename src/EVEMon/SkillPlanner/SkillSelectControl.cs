@@ -23,7 +23,7 @@ using EVEMon.Common.SettingsObjects;
 
 namespace EVEMon.SkillPlanner
 {
-    public partial class SkillSelectControl : UserControl
+    public partial class SkillSelectControl : EVEMonControl
     {
         public event EventHandler<EventArgs> SelectedSkillChanged;
 

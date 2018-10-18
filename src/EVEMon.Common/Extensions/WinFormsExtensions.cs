@@ -1,4 +1,7 @@
-﻿using System.Windows.Forms;
+﻿using EVEMon.Common.Interfaces;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EVEMon.Common.Extensions
 {
@@ -22,6 +25,17 @@ namespace EVEMon.Common.Extensions
             foreach (ListViewItem item in lv.Items)
             {
                 item.Selected = true;
+            }
+        }
+
+        public static void FindAndRecolorControls(this Control control)
+        {
+            foreach (var c in control.Controls.Cast<Control>())
+            {
+                if (typeof(IThemeable).IsAssignableFrom(c.GetType()))
+                    ((IThemeable)c).BackColor = Color.DarkGray;
+                if (c.HasChildren)
+                    FindAndRecolorControls(c);
             }
         }
     }

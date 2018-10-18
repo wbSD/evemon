@@ -19,7 +19,7 @@ using EVEMon.SkillPlanner;
 
 namespace EVEMon.CharacterMonitoring
 {
-    internal sealed partial class CharacterSkillsQueueList : UserControl
+    internal sealed partial class CharacterSkillsQueueList : EVEMonControl
     {
         #region Fields
 

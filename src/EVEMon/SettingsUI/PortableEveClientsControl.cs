@@ -4,11 +4,12 @@ using System.Linq;
 using System.Windows.Forms;
 using EVEMon.Common;
 using EVEMon.Common.Collections;
+using EVEMon.Common.Controls;
 using EVEMon.Common.Serialization.Settings;
 
 namespace EVEMon.SettingsUI
 {
-    public partial class PortableEveClientsControl : UserControl
+    public partial class PortableEveClientsControl : EVEMonControl
     {
         private const int RowHeight = 29;
 

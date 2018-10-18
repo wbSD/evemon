@@ -8,7 +8,7 @@ namespace EVEMon.Common.Controls
     /// <summary>
     /// A tab control which support drag and dropping.
     /// </summary>
-    public sealed class DraggableTabControl : TabControl
+    public sealed class DraggableTabControl : EVEMonTabControl
     {
         private int m_markerIndex;
         private bool m_markerOnLeft;

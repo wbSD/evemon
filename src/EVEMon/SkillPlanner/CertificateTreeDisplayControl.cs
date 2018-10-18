@@ -19,7 +19,7 @@ namespace EVEMon.SkillPlanner
     /// <summary>
     /// UserControl to display a tree of certificates.
     /// </summary>
-    public sealed partial class CertificateTreeDisplayControl : UserControl
+    public sealed partial class CertificateTreeDisplayControl : EVEMonControl
     {
         private const string TrainedIcon = "Trained";
         private const string TrainableIcon = "Trainable";

@@ -19,7 +19,7 @@ namespace EVEMon.SkillPlanner
     /// <summary>
     /// UserControl to display a tree of masteries.
     /// </summary>
-    public sealed partial class MasteryTreeDisplayControl : UserControl
+    public sealed partial class MasteryTreeDisplayControl : EVEMonControl
     {
         private const string TrainedIcon = "Trained";
         private const string TrainableIcon = "Trainable";

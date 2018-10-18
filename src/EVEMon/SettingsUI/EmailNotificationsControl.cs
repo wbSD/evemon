@@ -1,5 +1,6 @@
 ﻿using EVEMon.Common;
 using EVEMon.Common.Constants;
+using EVEMon.Common.Controls;
 using EVEMon.Common.EmailProvider;
 using EVEMon.Common.Extensions;
 using EVEMon.Common.Service;
@@ -12,7 +13,7 @@ using System.Windows.Forms;
 
 namespace EVEMon.SettingsUI
 {
-    public partial class EmailNotificationsControl : UserControl
+    public partial class EmailNotificationsControl : EVEMonControl
     {
         private NotificationSettings m_settings;
         private IEmailProvider m_defaultProvider;
