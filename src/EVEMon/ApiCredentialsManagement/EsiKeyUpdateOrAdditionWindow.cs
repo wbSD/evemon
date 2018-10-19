@@ -24,6 +24,7 @@ namespace EVEMon.ApiCredentialsManagement
     {
         private readonly SSOAuthenticationService m_authService;
         private readonly bool m_updateMode;
+        private bool m_keyValid;
         private ESIKey m_esiKey;
         private ESIKeyCreationEventArgs m_creationArgs;
         private readonly SSOWebServer m_server;
@@ -36,6 +37,7 @@ namespace EVEMon.ApiCredentialsManagement
         public EsiKeyUpdateOrAdditionWindow()
         {
             InitializeComponent();
+            m_keyValid = false;
             m_server = new SSOWebServer();
             m_state = DateTime.UtcNow.ToFileTime().ToString();
             m_authService = SSOAuthenticationService.GetInstance();
@@ -101,7 +103,7 @@ namespace EVEMon.ApiCredentialsManagement
                 Throbber.Visible = true;
             }
         }
-
+        
         /// <summary>
         /// Update the controls visibility depending on whether we are in update or creation mode.
         /// </summary>
@@ -163,7 +165,8 @@ namespace EVEMon.ApiCredentialsManagement
             ButtonPrevious.Visible = nextPrev;
             ButtonPrevious.Enabled = nextPrev;
             ButtonNext.Visible = nextPrev;
-            ButtonNext.Enabled = nextPrev;
+            // Disable "Import" on error
+            ButtonNext.Enabled = nextPrev && (newPage != ResultPage || m_keyValid);
             Throbber.State = ThrobberState.Stopped;
             Throbber.Visible = false;
         }
@@ -207,32 +210,23 @@ namespace EVEMon.ApiCredentialsManagement
         /// <summary>
         /// Goes to the results page once the key has been received from the server.
         /// </summary>
-        private void GoToResults(JsonResult<AccessResponse> result)
+        private void GoToResults(AccessResponse response)
         {
-            bool failed = result.HasError;
-            AccessResponse response = null;
             // Fail if an empty response is received
-            if (!failed)
-            {
-                response = result.Result;
-                if (string.IsNullOrEmpty(response?.AccessToken) || string.IsNullOrEmpty(
-                        response?.RefreshToken))
-                    failed = true;
-            }
+            bool failed = string.IsNullOrEmpty(response?.AccessToken) || string.IsNullOrEmpty(
+                response?.RefreshToken);
             // If the arguments have not been invalidated since the last time...
             if (m_creationArgs != null)
                 MultiPanel.SelectedPage = ResultPage;
             else if (failed)
             {
-                Exception e = result.Exception;
-                if (e != null)
-                    ExceptionHandler.LogException(e, true);
                 // Error when fetching the key
                 KeyPicture.Image = Resources.KeyWrong32;
                 KeyLabel.Text = Properties.Resources.ErrorNoToken;
                 CharactersGroupBox.Text = @"Error report";
                 ResultsMultiPanel.SelectedPage = ESITokenFailedErrorPage;
                 MultiPanel.SelectedPage = ResultPage;
+                m_keyValid = false;
             }
             else
             {
@@ -276,6 +270,7 @@ namespace EVEMon.ApiCredentialsManagement
                 KeyLabel.Text = message;
                 CharactersGroupBox.Text = "Error report";
                 ResultsMultiPanel.SelectedPage = GetErrorPage(e, message);
+                m_keyValid = false;
             }
             else
             {
@@ -289,6 +284,7 @@ namespace EVEMon.ApiCredentialsManagement
                 {
                     Tag = id,
                 });
+                m_keyValid = true;
             }
             
             // Issue a warning if the ESI key has no scopes
