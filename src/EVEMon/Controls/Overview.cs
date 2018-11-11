@@ -337,6 +337,8 @@ namespace EVEMon.Controls
                 }
 
                 labelNoCharacters.Visible = !EveMonClient.MonitoredCharacters.Any();
+
+                base.AdjustFormScrollbars(true);
             }
             finally
             {
