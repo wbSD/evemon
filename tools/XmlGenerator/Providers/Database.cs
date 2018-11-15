@@ -21,6 +21,26 @@ namespace EVEMon.XmlGenerator.Providers
         private static string s_text = string.Empty;
         private static int s_totalTablesCount;
 
+        private const string invBlueprintTypesQuery = @"
+select 	it.typeID as blueprintTypeID,
+		iap1.productTypeID,
+		ia1.time as productionTime,
+		ia3.time as researchProductivityTime,
+		ia4.time as researchMaterialTime,
+		ia5.time as researchCopyTime,
+		ia7.time as reverseEngineeringTime,
+		ia8.time as inventionTime,
+		ib.maxProductionLimit
+from invTypes it
+	inner join industryBlueprints ib on it.typeID = ib.typeID
+	left join industryActivity ia1 on ia1.typeID = it.typeID and ia1.activityID = 1
+	left join industryActivityProducts iap1 on ia1.typeID = iap1.typeID and ia1.activityID = iap1.activityID
+	left join industryActivity ia3 on ia3.typeID = it.typeID and ia3.activityID = 3
+	left join industryActivity ia4 on ia4.typeID = it.typeID and ia4.activityID = 4
+	left join industryActivity ia5 on ia5.typeID = it.typeID and ia5.activityID = 5
+	left join industryActivity ia7 on ia7.typeID = it.typeID and ia7.activityID = 7
+	left join industryActivity ia8 on ia8.typeID = it.typeID and ia8.activityID = 8";
+
         #region Properties
 
         /// <summary>
@@ -164,6 +184,11 @@ namespace EVEMon.XmlGenerator.Providers
         /// </summary>
         /// <value>The dgm attribute types table.</value>
         internal static BagCollection<InvTraits> InvTraitsTable { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the inv blueprint types able.
+        /// </summary>
+        internal static BagCollection<InvBlueprintTypes> InvBlueprintTypesTable  { get; private set; }
 
         /// <summary>
         /// Gets or sets the inv categories table.
@@ -370,8 +395,8 @@ namespace EVEMon.XmlGenerator.Providers
 
             // Find out what this used to be and find a way around it... Be interesting to see
             // if BPs apepar in the new invItems table and their traits in invTraits
-			//InvBlueprintTypesTable = BlueprintTypes();
-            //Util.UpdateProgress(s_totalTablesCount);
+			InvBlueprintTypesTable = BlueprintTypes();
+            Util.UpdateProgress(s_totalTablesCount);
 
             InvCategoriesTable = Categories();
             Util.UpdateProgress(s_totalTablesCount);
@@ -750,12 +775,12 @@ namespace EVEMon.XmlGenerator.Providers
         {
             IndexedCollection<InvBlueprintTypes> collection = new IndexedCollection<InvBlueprintTypes>();
 
-            foreach (invBlueprintTypes blueprint in s_context.invBlueprintTypes)
+            foreach (invBlueprintTypes blueprint in s_context.invBlueprintTypes.SqlQuery(invBlueprintTypesQuery))
             {
                 InvBlueprintTypes item = new InvBlueprintTypes
                 {
                     ID = blueprint.blueprintTypeID,
-                    ParentID = blueprint.parentBlueprintTypeID,
+                    //ParentID = blueprint.parentBlueprintTypeID,
                 };
 
                 if (blueprint.productTypeID.HasValue)
@@ -764,8 +789,8 @@ namespace EVEMon.XmlGenerator.Providers
                 if (blueprint.productionTime.HasValue)
                     item.ProductionTime = blueprint.productionTime.Value;
 
-                if (blueprint.techLevel.HasValue)
-                    item.TechLevel = blueprint.techLevel.Value;
+                //if (blueprint.techLevel.HasValue)
+                //    item.TechLevel = blueprint.techLevel.Value;
 
                 if (blueprint.researchProductivityTime.HasValue)
                     item.ResearchProductivityTime = blueprint.researchProductivityTime.Value;
@@ -776,11 +801,11 @@ namespace EVEMon.XmlGenerator.Providers
                 if (blueprint.researchCopyTime.HasValue)
                     item.ResearchCopyTime = blueprint.researchCopyTime.Value;
 
-                if (blueprint.researchTechTime.HasValue)
-                    item.ResearchTechTime = blueprint.researchTechTime.Value;
+                //if (blueprint.researchTechTime.HasValue)
+                //    item.ResearchTechTime = blueprint.researchTechTime.Value;
 
-                if (blueprint.duplicatingTime.HasValue)
-                    item.DuplicatingTime = blueprint.duplicatingTime.Value;
+                //if (blueprint.duplicatingTime.HasValue)
+                //    item.DuplicatingTime = blueprint.duplicatingTime.Value;
 
                 if (blueprint.reverseEngineeringTime.HasValue)
                     item.ReverseEngineeringTime = blueprint.reverseEngineeringTime.Value;
@@ -788,11 +813,11 @@ namespace EVEMon.XmlGenerator.Providers
                 if (blueprint.inventionTime.HasValue)
                     item.InventionTime = blueprint.inventionTime.Value;
 
-                if (blueprint.productivityModifier.HasValue)
-                    item.ProductivityModifier = blueprint.productivityModifier.Value;
+                //if (blueprint.productivityModifier.HasValue)
+                //    item.ProductivityModifier = blueprint.productivityModifier.Value;
 
-                if (blueprint.wasteFactor.HasValue)
-                    item.WasteFactor = blueprint.wasteFactor.Value;
+                //if (blueprint.wasteFactor.HasValue)
+                //    item.WasteFactor = blueprint.wasteFactor.Value;
 
                 if (blueprint.maxProductionLimit.HasValue)
                     item.MaxProductionLimit = blueprint.maxProductionLimit.Value;
