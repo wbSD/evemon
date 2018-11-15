@@ -197,8 +197,6 @@ order by 1,2,3,4";
         /// <value>The eve units table.</value>
         internal static BagCollection<EveUnits> EveUnitsTable { get; private set; }
 
-        //internal static BagCollection<IndustryBlueprints> IndustryBlueprintsTable { get; private set; }
-
         /// <summary>
         /// Gets or sets the inv items table.
         /// </summary>
@@ -416,8 +414,8 @@ order by 1,2,3,4";
             DgmTypeEffectsTable = TypeEffects();
             Util.UpdateProgress(s_totalTablesCount);
 
-			// Find out what this used to be and find a way around it... Is it even useful?
-			//DgmTypeTraitsTable = TypeTraits();
+            // Find out what this used to be and find a way around it... Is it even useful?
+            //DgmTypeTraitsTable = TypeTraits();
             //Util.UpdateProgress(s_totalTablesCount);
 
             EveIconsTable = Icons();
@@ -425,9 +423,7 @@ order by 1,2,3,4";
             EveUnitsTable = Units();
             Util.UpdateProgress(s_totalTablesCount);
 
-            // Find out what this used to be and find a way around it... Be interesting to see
-            // if BPs apepar in the new invItems table and their traits in invTraits
-			InvBlueprintTypesTable = BlueprintTypes();
+            InvBlueprintTypesTable = BlueprintTypes();
             Util.UpdateProgress(s_totalTablesCount);
 
             InvCategoriesTable = Categories();
@@ -463,7 +459,6 @@ order by 1,2,3,4";
             MapSolarSystemsTable = SolarSystems();
             Util.UpdateProgress(s_totalTablesCount);
 
-            // Figure out what this used to be and what it became. Do we even need to worry about Industry right now?
             RamTypeRequirementsTable = TypeRequirements();
             Util.UpdateProgress(s_totalTablesCount);
 
@@ -812,7 +807,6 @@ order by 1,2,3,4";
                 InvBlueprintTypes item = new InvBlueprintTypes
                 {
                     ID = blueprint.blueprintTypeID,
-                    //ParentID = blueprint.parentBlueprintTypeID,
                 };
 
                 if (blueprint.productTypeID.HasValue)
@@ -820,9 +814,6 @@ order by 1,2,3,4";
 
                 if (blueprint.productionTime.HasValue)
                     item.ProductionTime = blueprint.productionTime.Value;
-
-                //if (blueprint.techLevel.HasValue)
-                //    item.TechLevel = blueprint.techLevel.Value;
 
                 if (blueprint.researchProductivityTime.HasValue)
                     item.ResearchProductivityTime = blueprint.researchProductivityTime.Value;
@@ -833,23 +824,11 @@ order by 1,2,3,4";
                 if (blueprint.researchCopyTime.HasValue)
                     item.ResearchCopyTime = blueprint.researchCopyTime.Value;
 
-                //if (blueprint.researchTechTime.HasValue)
-                //    item.ResearchTechTime = blueprint.researchTechTime.Value;
-
-                //if (blueprint.duplicatingTime.HasValue)
-                //    item.DuplicatingTime = blueprint.duplicatingTime.Value;
-
                 if (blueprint.reverseEngineeringTime.HasValue)
                     item.ReverseEngineeringTime = blueprint.reverseEngineeringTime.Value;
 
                 if (blueprint.inventionTime.HasValue)
                     item.InventionTime = blueprint.inventionTime.Value;
-
-                //if (blueprint.productivityModifier.HasValue)
-                //    item.ProductivityModifier = blueprint.productivityModifier.Value;
-
-                //if (blueprint.wasteFactor.HasValue)
-                //    item.WasteFactor = blueprint.wasteFactor.Value;
 
                 if (blueprint.maxProductionLimit.HasValue)
                     item.MaxProductionLimit = blueprint.maxProductionLimit.Value;
@@ -1311,20 +1290,8 @@ order by 1,2,3,4";
                 if (requirement.level.HasValue)
                     item.Level = requirement.level.Value;
 
-                //if (requirement.damagePerJob.HasValue)
-                //    item.DamagePerJob = requirement.damagePerJob.Value;
-
-                //if (requirement.recycle.HasValue)
-                //    item.Recyclable = requirement.recycle.Value;
-
-                //if (requirement.raceID.HasValue)
-                //    item.RaceID = requirement.raceID.Value;
-
                 if (requirement.probability.HasValue)
                     item.Probability = requirement.probability.Value;
-
-                //if (requirement.consume.HasValue)
-                //    item.Consume = requirement.consume.Value;
 
                 list.Add(item);
             }
