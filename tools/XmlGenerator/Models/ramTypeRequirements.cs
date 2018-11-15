@@ -26,14 +26,14 @@ namespace EVEMon.XmlGenerator.Models
 
         public int? level { get; set; }
 
-        public double? damagePerJob { get; set; }
+        //public double? damagePerJob { get; set; }
 
-        public bool? recycle { get; set; }
+        //public bool? recycle { get; set; }
 
-        public int? raceID { get; set; }
+        //public int? raceID { get; set; }
 
         public double? probability { get; set; }
 
-        public bool? consume { get; set; }
+        //public bool? consume { get; set; }
     }
 }

@@ -41,6 +41,38 @@ from invTypes it
 	left join industryActivity ia7 on ia7.typeID = it.typeID and ia7.activityID = 7
 	left join industryActivity ia8 on ia8.typeID = it.typeID and ia8.activityID = 8";
 
+        private const string ramTypeRequirementsQuery = @"
+select 	2 as sort,
+		ia.typeID,
+		ia.activityID,
+		iam.materialTypeID as requiredTypeID,
+		iam.quantity,
+		null as level,
+		null as probability
+from industryActivity ia
+	inner join industryActivityMaterials iam on ia.typeID = iam.typeID and ia.activityID = iam.activityID
+union all
+select 	1 as sort,
+		ia.typeID,
+		ia.activityID,
+		ias.skillID as requiredTypeID,
+		null as quantity,
+		ias.level,
+		null as probability
+from industryActivity ia
+	inner join industryActivitySkills ias on ia.typeID = ias.typeID and ia.activityID = ias.activityID
+union all
+select 	0 as sort,
+		ia.typeID,
+		ia.activityID,
+		iap.productTypeID as requiredTypeID,
+		null as quantity,
+		null as level,
+		iap.probability
+from industryActivity ia
+	inner join industryActivityProbabilities iap on ia.typeID = iap.typeID and ia.activityID = iap.activityID
+order by 1,2,3,4";
+
         #region Properties
 
         /// <summary>
@@ -431,9 +463,9 @@ from invTypes it
             MapSolarSystemsTable = SolarSystems();
             Util.UpdateProgress(s_totalTablesCount);
 
-			// Figure out what this used to be and what it became. Do we even need to worry about Industry right now?
-            //RamTypeRequirementsTable = TypeRequirements();
-            //Util.UpdateProgress(s_totalTablesCount);
+            // Figure out what this used to be and what it became. Do we even need to worry about Industry right now?
+            RamTypeRequirementsTable = TypeRequirements();
+            Util.UpdateProgress(s_totalTablesCount);
 
             StaStationsTable = Stations();
             Util.UpdateProgress(s_totalTablesCount);
@@ -1264,7 +1296,7 @@ from invTypes it
         {
             List<RamTypeRequirements> list = new List<RamTypeRequirements>();
 
-            foreach (ramTypeRequirements requirement in s_context.ramTypeRequirements)
+            foreach (ramTypeRequirements requirement in s_context.ramTypeRequirements.SqlQuery(ramTypeRequirementsQuery))
             {
                 RamTypeRequirements item = new RamTypeRequirements
                 {
@@ -1279,20 +1311,20 @@ from invTypes it
                 if (requirement.level.HasValue)
                     item.Level = requirement.level.Value;
 
-                if (requirement.damagePerJob.HasValue)
-                    item.DamagePerJob = requirement.damagePerJob.Value;
+                //if (requirement.damagePerJob.HasValue)
+                //    item.DamagePerJob = requirement.damagePerJob.Value;
 
-                if (requirement.recycle.HasValue)
-                    item.Recyclable = requirement.recycle.Value;
+                //if (requirement.recycle.HasValue)
+                //    item.Recyclable = requirement.recycle.Value;
 
-                if (requirement.raceID.HasValue)
-                    item.RaceID = requirement.raceID.Value;
+                //if (requirement.raceID.HasValue)
+                //    item.RaceID = requirement.raceID.Value;
 
                 if (requirement.probability.HasValue)
                     item.Probability = requirement.probability.Value;
 
-                if (requirement.consume.HasValue)
-                    item.Consume = requirement.consume.Value;
+                //if (requirement.consume.HasValue)
+                //    item.Consume = requirement.consume.Value;
 
                 list.Add(item);
             }
