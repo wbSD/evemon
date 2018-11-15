@@ -42,8 +42,7 @@ from invTypes it
 	left join industryActivity ia8 on ia8.typeID = it.typeID and ia8.activityID = 8";
 
         private const string ramTypeRequirementsQuery = @"
-select 	2 as sort,
-		ia.typeID,
+select 	ia.typeID,
 		ia.activityID,
 		iam.materialTypeID as requiredTypeID,
 		iam.quantity,
@@ -52,8 +51,7 @@ select 	2 as sort,
 from industryActivity ia
 	inner join industryActivityMaterials iam on ia.typeID = iam.typeID and ia.activityID = iam.activityID
 union all
-select 	1 as sort,
-		ia.typeID,
+select 	ia.typeID,
 		ia.activityID,
 		ias.skillID as requiredTypeID,
 		null as quantity,
@@ -62,16 +60,14 @@ select 	1 as sort,
 from industryActivity ia
 	inner join industryActivitySkills ias on ia.typeID = ias.typeID and ia.activityID = ias.activityID
 union all
-select 	0 as sort,
-		ia.typeID,
+select 	ia.typeID,
 		ia.activityID,
 		iap.productTypeID as requiredTypeID,
 		null as quantity,
 		null as level,
 		iap.probability
 from industryActivity ia
-	inner join industryActivityProbabilities iap on ia.typeID = iap.typeID and ia.activityID = iap.activityID
-order by 1,2,3,4";
+	inner join industryActivityProbabilities iap on ia.typeID = iap.typeID and ia.activityID = iap.activityID";
 
         #region Properties
 
