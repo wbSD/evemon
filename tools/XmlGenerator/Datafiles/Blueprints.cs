@@ -450,7 +450,7 @@ namespace EVEMon.XmlGenerator.Datafiles
                                       (requirement.ActivityID == (int)BlueprintActivity.Invention ||
                                        requirement.ActivityID == (int)BlueprintActivity.ReverseEngineering)))
             {
-                blueprint.InventionTypeIDs.Add(requirement.RequiredTypeID, requirement.Probability.GetValueOrDefault());
+                blueprint.InventionTypeIDs.Add(requirement.RequiredTypeID, (decimal)requirement.Probability.GetValueOrDefault());
             }
         }
 
