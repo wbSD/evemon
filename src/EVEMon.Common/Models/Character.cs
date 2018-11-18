@@ -91,51 +91,60 @@ namespace EVEMon.Common.Models
         public void UpdateAccountStatus(AccountStatusType status = AccountStatusType.Unknown)
         {
             var skill = CurrentlyTrainingSkill;
+            var skillIsTraining = (skill != null) && skill.IsTraining;
 
-            if (skill != null && skill.IsTraining)
+            if (skillIsTraining && SkillPoints > EveConstants.MaxAlphaSkillTraining)
             {
-                if (SkillPoints > EveConstants.MaxAlphaSkillTraining)
+                status = AccountStatusType.Omega;
+            }
+            else
+            {
+                bool likelyAlpha = false;
+                foreach (var sk in Skills)
                 {
-                    status = AccountStatusType.Omega;
-                }
-                else
-                {
-                    // Try to determine account status based on training time
-                    var hoursToTrain = (skill.EndTime - skill.StartTime).TotalHours;
-                    var spToTrain = skill.EndSP - skill.StartSP;
-                    if (hoursToTrain > 0 && spToTrain > 0)
+                    // Is the skill level being limited by alpha status?
+                    if (sk.ActiveLevel < sk.Level)
                     {
-                        // spPerHour must be greater than zero since both the numerator and
-                        // denominator are
-                        var spPerHour = spToTrain / hoursToTrain;
-                        double rate = GetOmegaSPPerHour(skill.Skill) / spPerHour;
-                        // Allow for small margin of error
-                        if (rate < 1.2 && rate > 0.8)
-                            status = AccountStatusType.Omega;
-                        else if (rate > 1.1)
-                            status = AccountStatusType.Alpha;
+                        // Active level is being limited by alpha status.
+                        likelyAlpha = true;
+                    }
+                    // Has the skill alpha limit been exceeded?
+                    if (sk.ActiveLevel > sk.StaticData.AlphaLimit)
+                    {
+                        // Active level is greater than alpha limit, only on Omega.
+                        status = AccountStatusType.Omega;
+                        break;
+                    }
+                }
+                if (status == AccountStatusType.Unknown)
+                {
+                    if (likelyAlpha)
+                        // This was false triggering in some circumstances, give "active level
+                        // > alpha limit" higher priority
+                        status = AccountStatusType.Alpha;
+                    else if (skillIsTraining)
+                    {
+                        // Try to determine account status based on training time
+                        var hoursToTrain = (skill.EndTime - skill.StartTime).TotalHours;
+                        var secondsToTrain = (skill.EndTime - skill.StartTime).TotalSeconds;
+                        var spToTrain = skill.EndSP - skill.StartSP;
+                        // training time formula requirenment: 6 seconds.
+                        // jitter for EndTime and StartTime: 2 seconds. Total 8 seconds.
+                        if (secondsToTrain > 8 && spToTrain > 0)
+                        {
+                            // spPerHour must be greater than zero since numerator and denominator are
+                            var spPerHour = spToTrain / hoursToTrain;
+                            double rate = GetOmegaSPPerHour(skill.Skill) / spPerHour;
+                            // Allow for small margin of error, important on skills nearing completion.
+                            if (rate < 1.2 && rate > 0.8)
+                                status = AccountStatusType.Omega;
+                            else if (rate > 1.1)
+                                status = AccountStatusType.Alpha;
+                        }
                     }
                 }
             }
-
-            foreach (var sk in Skills)
-            {
-                // Is the skill level being limited by alpha status?
-                if (sk.ActiveLevel < sk.Level)
-                {
-                    // Active level is being limited by alpha status.
-                    status = AccountStatusType.Alpha;
-                    break;
-                }
-                // Has the skill alpha limit been exceeded?
-                if (sk.ActiveLevel > sk.StaticData.AlphaLimit)
-                {
-                    // Active level is greater than alpha limit, only on Omega.
-                    status = AccountStatusType.Omega;
-                    break;
-                }
-            }
-
+            
             CharacterStatus = new AccountStatus(status);
         }
 
